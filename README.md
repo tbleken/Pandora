@@ -1,4 +1,4 @@
-## Thor tool Pandora
+# Thor tool Pandora
 
 **Thor Pandora** is a "Leatherman&#8482;" tool for VFP programmers. Or a Pandora's Box of tools, if you like. Several features are planned for release later.  
 
@@ -14,11 +14,8 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 
 One smart tip is to store a list of **Pandora** "commands" in a prg, and have its name as line # 1 in *default.txt*. When you start VFP, you press `F8` and voila, all your day-to.day files will only be a few keystrokes away. And, with proper grouping and comments, it will soon be your favorite "work place".
 
-## Keywords  
+# Keywords  
 ## ED 
-
-
-
 
 You type|Result after pressing `F8`
 ---|---
