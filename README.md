@@ -17,11 +17,12 @@ One smart tip is to store a list of **Pandora** "commands" in a prg, and have it
 ## Keywords  
 ## ED 
 
-You type|Result after pressing `F8`  
---------|---------------------|---  
-ed (in Command Window)|Group of files defined in line 1 of *default.txt* are opened 
 
 
+
+You type|Result after pressing `F8`
+---|---
+ed (in Command Window)|Group of files defined in line 1 of *default.txt* are opened
 \<blank\> (in Command Window)|Same as above
 ed x (x=numeric,>0)|Group of matching files in *default.txt* are opened
 x (x=numeric)|Same as above
