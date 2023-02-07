@@ -49,7 +49,7 @@ If the file `Pandora.txt` doesn't exist, it can be created in three ways:
 
 Here's a realistic sample:
 
-![Pandora](https://user-images.githubusercontent.com/3491804/217336826-37c4507e-1dfc-47c5-ab40-5c87d092ea21.png)
+![Pandora](pandorafile.png)
 
 To open **all** the files prefixed with a number, type the number in the Command window and press `F8`. This may be any kind of file as mentioned in the previous paragraph. Typically these will be the files you work with in a VFP project, also non VFP files.
 
