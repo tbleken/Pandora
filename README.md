@@ -56,11 +56,11 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 
 You type|Result after pressing `F8`  
 ---|---
-ed (in Command Window)|Group of files defined in line 1 of *default.txt* are opened 
+ed (in Command Window)|Group of files defined in line 1 of *pandora.txt* are opened 
 \<blank\> (in Command Window)|Same as above 
-ed x (x=numeric,>0)|Group of matching files in *default.txt* are opened 
+ed x (x=numeric,>0)|Group of matching files in *pandora.txt* are opened 
 x (x=numeric)|Same as above 
-ed 0 (zero)|File *default.txt* is opened in editor 
+ed 0 (zero)|File *pandora.txt* is opened in editor 
 0|Same as above 
 ed test.txt|File *test.txt* is opened in editor 
 ed prog\pro1.prg|*pro1.prg* is opened in editor 
