@@ -2,7 +2,7 @@
 
 **Thor Pandora** is a "Swiss Army Knife&#8482;" like tool for VFP programmers. In other word, a tool that contains several tools in one. More new features are planned for release later.  
 
-To use it efficiently, assign a Hot Key to it, for instance `F8`. `F8` is used in this domument. 
+To use it efficiently, assign a Hot Key to it, for instance `F8`. `F8` is used in this document. 
 
 To really take advantage of **Pandora**, create a file named `Pandora.txt` in your working folder. This filename can be changed using `Alt-F12`, select `Options->Pandora`. In this document this file is consistently called `Pandora.txt`.
 
