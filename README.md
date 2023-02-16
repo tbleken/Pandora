@@ -54,25 +54,25 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 ## ED 
 ***Not that `ED`must *not* be used in `Pandora.txt`!***  
 
-You type|Result after pressing `F8`
---------|---------------------|--- 
+You type|Result after pressing `F8`  
+---|---
 ed (in Command Window)|Group of files defined in line 1 of *default.txt* are opened 
-\<blank\> (in Command Window)|Same as above
-ed x (x=numeric,>0)|Group of matching files in *default.txt* are opened
-x (x=numeric)|Same as above
-ed 0 (zero)|File *default.txt* is opened in editor
-0|Same as above
-ed test.txt|File *test.txt* is opened in editor
-ed prog\pro1.prg|*pro1.prg* is opened in editor
-ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')|variable is resolved and file opened in editor
-ed myprog.prg && My notes|myprog.prg opened, comments ignored
-ed pg.vcx|pg.vcx is opened in the Class Browser
-ed pg.scx.form.txtfind.keypress|*pg.scx* is opened and editor presents the keypress method
-ed pg.scx.form.txtfind.keypress:10|Same as above, cursor is on line 10
-ed https:\/\/github.com/VFPX/Thor|Thor homepage opens in default browser
-ed C:\Somefolder\Somefile.xlsx|Somefile.xlsx opens in Excel
-ed C:\Somefolder\Somemovie.mp4|Somemovie.mp4 opens in default application
-?|Pandora Help
+\<blank\> (in Command Window)|Same as above 
+ed x (x=numeric,>0)|Group of matching files in *default.txt* are opened 
+x (x=numeric)|Same as above 
+ed 0 (zero)|File *default.txt* is opened in editor 
+0|Same as above 
+ed test.txt|File *test.txt* is opened in editor 
+ed prog\pro1.prg|*pro1.prg* is opened in editor 
+ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')|variable is resolved and file opened in editor 
+ed myprog.prg && My notes|myprog.prg opened, comments ignored 
+ed pg.vcx|pg.vcx is opened in the Class Browser 
+ed pg.scx.form.txtfind.keypress|*pg.scx* is opened and editor presents the keypress method 
+ed pg.scx.form.txtfind.keypress:10|Same as above, cursor is on line 10 
+ed https:\/\/github.com/VFPX/Thor|Thor homepage opens in default browser 
+ed C:\Somefolder\Somefile.xlsx|Somefile.xlsx opens in Excel 
+ed C:\Somefolder\Somemovie.mp4|Somemovie.mp4 opens in default application 
+?|Pandora Help 
 
 *Note:* For the keyword `ed`, no deletion is done in the "source" file or in the command window.
 
