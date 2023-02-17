@@ -54,25 +54,25 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 ## ED 
 ***Not that `ED`must *not* be used in `Pandora.txt`!***  
 
-You type|Result after pressing `F8`  
----|---
-ed (in Command Window)|Group of files defined in line 1 of *pandora.txt* are opened 
-\<blank\> (in Command Window)|Same as above 
-ed x (x=numeric,>0)|Group of matching files in *pandora.txt* are opened 
-x (x=numeric)|Same as above 
-ed 0 (zero)|File *pandora.txt* is opened in editor 
-0|Same as above 
-ed test.txt|File *test.txt* is opened in editor 
-ed prog\pro1.prg|*pro1.prg* is opened in editor 
-ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')|variable is resolved and file opened in editor 
-ed myprog.prg && My notes|myprog.prg opened, comments ignored 
-ed pg.vcx|pg.vcx is opened in the Class Browser 
-ed pg.scx.form.txtfind.keypress|*pg.scx* is opened and editor presents the keypress method 
-ed pg.scx.form.txtfind.keypress:10|Same as above, cursor is on line 10 
-ed https:\/\/github.com/VFPX/Thor|Thor homepage opens in default browser 
-ed C:\Somefolder\Somefile.xlsx|Somefile.xlsx opens in Excel 
-ed C:\Somefolder\Somemovie.mp4|Somemovie.mp4 opens in default application 
-?|Pandora Help 
+|You type:|Result after pressing `F8`:|   
+|--------|----------------|  
+|ed (in Command Window)|Group of files defined in line 1 of *pandora.txt* are opened| 
+|\<blank\> (in Command Window)|Same as above| 
+|ed x (x=numeric,>0)|Group of matching files in *pandora.txt* are opened|
+|x (x=numeric)|Same as above|
+|ed 0 (zero)|File *pandora.txt* is opened in editor|
+|0|Same as above|
+|ed test.txt|File *test.txt* is opened in editor|
+|ed prog\pro1.prg|*pro1.prg* is opened in editor|
+|ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')|variable is resolved and file opened in editor|
+|ed myprog.prg && My notes|myprog.prg opened, comments ignored|
+|ed pg.vcx|pg.vcx is opened in the Class Browser|
+|ed pg.scx.form.txtfind.keypress|*pg.scx* is opened and editor presents the keypress method|
+|ed pg.scx.form.txtfind.keypress:10|Same as above, cursor is on line 10|
+|ed https:\/\/github.com/VFPX/Thor|Thor homepage opens in default browser|
+|ed C:\Somefolder\Somefile.xlsx|Somefile.xlsx opens in Excel|
+|ed C:\Somefolder\Somemovie.mp4|Somemovie.mp4 opens in default application|
+|?|Pandora Help (this document)|
 
 *Note:* For the keyword `ed`, no deletion is done in the "source" file or in the command window.
 
@@ -98,18 +98,47 @@ The syntax is best shown by samples. Pressing `F8` will present a dropdown of ma
 
 This is what happens in a prg or a method code window:  
 
-You type|After pressing Enter
--------|-------
-no lo zip|Local lo as zipfiles of utilities.vcx<br>lo = NewObject('zipfiles', 'utilities.vcx')
-no lo=zip|Same as above, = is optional
-no lo zip!|Same as above, ! forces a refresh of the option list
-no zip|Local loZip as zipfiles of utilities.vcx<br>loZip = NewObject('zipfiles', 'utilities.vcx')
-no lo \*ut|Shows a list where *ut* is somewhere in a class name
-no loVar +ut|Shows list where *ut* is in a class name or a classlib name
-no myObj.Lo zip|myobj.NewObject('lo','zipfiles', 'utilities.vcx')
+|You type:|After pressing Enter:|
+|-------|-------|
+|no lo zip|Local lo as zipfiles of utilities.vcx<br>lo = NewObject('zipfiles', 'utilities.vcx')|
+|no lo=zip|Same as above, = is optional|
+|no lo zip!|Same as above, ! forces a refresh of the option list|
+|no zip|Local loZip as zipfiles of utilities.vcx<br>loZip = NewObject('zipfiles', 'utilities.vcx')|
+|no lo \*ut|Shows a list where *ut* is somewhere in a class name|
+|no loVar +ut|Shows list where *ut* is in a class name or a classlib name|
+|no myObj.Lo zip|myobj.NewObject('lo','zipfiles', 'utilities.vcx')|
 
 The last sample shows the syntax to call an object's NewObject method.  
 
 *Note:* In the command window there won't be any Local declaration.
+
+## Execute Selected Text 
+
+`Pandora` will call Thor tool [Execute Selected Text](https://github.com/VFPX/Thor/blob/master/Docs/NewsItems/Item_46.md). From its documentation:  
+*This tool is an extension of the familiar option in the context menu when editing code:*  
+
+![](https://github.com/VFPX/Thor/blob/master/Docs/NewsItems/Images/Item_46_ExecuteSelection.png?raw=true)  
+
+The tool provides three new features:
+
+1. If NO text is selected, the entire (possibly multiple line) statement is highlighted and executed. The cursor can be anywhere in any line of the statement. In other words, click somewhere in the statement and run the tool to execute the statement.
+
+2. All defined constants will work (instead of failing as they do when using the context menu). That means all defined constants from #Define or #Include directives as well as the include files from VCXs and SCXs. Note, for example, the use of CR in the image above.
+
+3. A plug-in is provided for you to handle the selected text; you might save it in the clipboard or some history file.
+
+**Note that this also works for single lines.**  
+
+The old way: Mark everything, right-click and select Execute Selection. 
+The new way: Place the cursor anywhere inside the line/statement, and press `F8`! 
+
+## SuperBrowse 
+`Pandora` can also call [SuperBrowse.](https://github.com/VFPX/Thor/blob/master/Docs/Thor_superbrowse.md)  
+Place the cursor "inside" a table name and press `F8`. `Pandora` will use several tools to locate the table, and open it in `SuperBrowse`.  
+
+Note that there are cases where you need to highlight the table name before you press `F8`. The reason is that although `Pandora` is smart, it can't read your mind. :-) It doesn't know whether you want to use the tool `Execute Selected Text` or `SuperBrowse.` So if the line/statement starts with a keyword like `Select`, `Use` or other words that makes the line/statement executable, it will be executed.
+
+![](https://github.com/VFPX/Thor/blob/master/Docs/Images/Thor_Super_Browse_SNAGHTML8410e4d.png?raw=true)
+
 
 ### More "extras" to follow, suggestions are welcomed. 
