@@ -7,8 +7,8 @@ To use it efficiently, assign a Hot Key to it, for instance `F8`. `F8` is used i
 To really take advantage of **Pandora**, create a file named `Pandora.txt` in your working folder. This filename can be changed using `Alt-F12`, select `Options->Pandora`. In this document this file is consistently called `Pandora.txt`.
 
 If the file `Pandora.txt` doesn't exist, it can be created in three ways:
-1. In the command window, press `F8` in a blank line, and confirm.
-2. In the command window or any VFP editor window, type 0 (zero) on a blank line, press `F8` and confirm.
+1. In the Command window, press `F8` in a blank line, and confirm.
+2. In the Command window or any VFP editor window, type 0 (zero) on a blank line, press `F8` and confirm.
 3. Create the file using any editor, e.g. Modify File or Notepad.
 
 Here is the content of a typical `Pandora.txt`:
@@ -46,7 +46,7 @@ Here is the content of a typical `Pandora.txt`:
 > #5 Zip utility, needs more classes, and must be tested  
 > 5 utilities.vcx.zipfiles.zipfile:2  
 
-Most of the "command lines" listed above, can be used both in the command window and in a "Modify Command" editor window. In those cases, instead of the number, use the word `ed`, for instance `ed myprog.prg` or `ed 0`. The latter will open `Pandora.txt` for editing.
+Most of the "command lines" listed above, can be used both in the Command window and in a "Modify Command" editor window. In those cases, instead of the number, use the word `ed`, for instance `ed myprog.prg` or `ed 0`. The latter will open `Pandora.txt` for editing.
 
 **Pandora** has many features, as seen in the sample above, and listed below in no particular order. Most of these features take a whole line, and "interprets" it.  You enter some text, press `F8`, and the "magic" happens. Or the text is already stored in a "library" file, typically a .prg. 
 
@@ -114,7 +114,7 @@ The same is true if you want to use **Pandora** keywords in a .prg. This is real
 To open **all** the files prefixed with a number, type that number in the Command window and press `F8`. This may be any kind of file as seen in the previous paragraphs. Typically these will be the files you work with in a VFP project, also non VFP files.
 
 A special case in many aspects is `0 (zero)`: 
-1. 0 in the command window will open `Pandora.txt` for editing, if it exists.
+1. 0 in the Command window will open `Pandora.txt` for editing, if it exists.
 2. 0 as the group number in `Pandora.txt` will include the file(s) mentioned for every group.
 
 Notice the first line, `Default project: 5`. To open all the files in the specified group, `5` in this example, you don't have to specify the number. Just press `F8` in an empty line in the Command window, and all the #5 files will be opened, plus all the #0 files. Notice that this number must be the very last "word" in the first line.
@@ -144,7 +144,7 @@ This is what happens in a prg or a method code window:
 
 The last sample shows the syntax to call an object's NewObject method.  
 
-*Note:* In the command window there won't be any Local declaration.
+*Note:* In the Command window there won't be any Local declaration.
 
 ## Execute Selected Text 
 
