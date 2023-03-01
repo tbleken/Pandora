@@ -109,7 +109,7 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 
 *Note:* To distinguish "real" VFP commands from **Pandora** keywords, it's necessary to add the the keyword `ed`, as the first word in a line in `Pandora.txt`. This is **not** necessary in the Command window. 
 
-The same is true if you want to use **Pandora** keywords in a .prg. This is really handy, since you can have a special file with all your **Pandora** code snippets. Tip: Use `Pandora.prg` for this, available directly from the COmmand window by typing . (dot) and pressing `F8`.
+The same is true if you want to use **Pandora** keywords in a .prg. This is really handy, since you can have a special file with all your **Pandora** code snippets. Tip: Use `Pandora.prg` for this, available directly from the Command window by typing . (dot) and pressing `F8`.
 
 To open **all** the files prefixed with a number, type that number in the Command window and press `F8`. This may be any kind of file as seen in the previous paragraphs. Typically these will be the files you work with in a VFP project, also non VFP files.
 
