@@ -175,6 +175,9 @@ Note that there are cases where you need to highlight the table name before you 
 
 ![](https://github.com/VFPX/Thor/blob/master/Docs/Images/Thor_Super_Browse_SNAGHTML8410e4d.png?raw=true)
 
+## INC
+
+This keyword is a helper to include a header file, .h, into your program. Type `inc` or `#inc` and press `F8`, and you get a dropdown list of all the .h files in your path.
 
 ### More "extras" to follow, suggestions are welcomed. 
 
