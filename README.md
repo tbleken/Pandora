@@ -58,29 +58,34 @@ An initial \* is respected as a commented line for single executable lines. **Ho
 
 # Keywords
 ## In the Command Window:
+#### Most of these commands also work in the editors (Modify Command and Modify File)
 
-| You type                                               | Result after pressing `F8`                                   |
-|:-------------------------------------------------------|:-------------------------------------------------------------|
+| You type                             | Result after pressing `F8`                                   |
+|:-------------------------------------|:-------------------------------------------------------------|
 | ed                                  | Group of files defined in line 1 of `pandora.txt` are opened |
 | \<blank\>                           | Same as above                                                |
-| ed x (x=numeric,>0)                                    | Group of matching files in `pandora.txt` are opened          |
-| x (x=numeric)                                          | Same as above                                                |
-| ed 0 (zero)                                            | File `pandora.txt` is opened in editor                       |
-| 0                                                      | Same as above                                                |
-| ed test.txt                                            | File `test.txt` is opened in editor                          |
-| ed prog\pro1.prg                                       | `pro1.prg` is opened in editor                               |
+| ed x (x=numeric,>0)                 | Group of matching files in `pandora.txt` are opened          |
+| x (x=numeric)                                          | Same as above                           |
+| ed 0 (zero)                                            | File `pandora.txt` is opened in editor   |
+| 0                                                      | Same as above                             |
+| ed test.txt                                            | File `test.txt` is opened in editor        |
+| ed prog\pro1.prg                                       | `pro1.prg` is opened in editor              |
 | ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg') | variable is resolved and file opened in editor               |
-| ed myprog.prg && My notes                              | `myprog.prg` opened, comments ignored                          |
-| ed pg.vcx                                              | `pg.vcx` is opened in the Class Browser                        |
-| ed pg.scx.form.txtfind.keypress                        | `pg.scx` is opened and editor presents the keypress method   |
-| ed pg.scx.form.txtfind.keypress:10                     | Same as above, cursor is on line 10                          |
-| ed https:\/\/github.com/VFPX/Thor                      | Thor homepage opens in default browser                       |
-| ed C:\Somefolder\Somefile.xlsx                         | `Somefile.xlsx` is opened in Excel                                 |
-| ed C:\Somefolder\Somemovie.mp4                         | `Somemovie.mp4` is opened in default application                   |
-| ?                                                      | Pandora Help (this document)                                 |
-| #                                                      | Picklist of projects in `Pandora.txt`                                 |
-| -                                                      | Same as above                                 |
-| menu                                                   | Same as above                                 |
+| ed myprog.prg && My notes                              | `myprog.prg` opened, comments ignored       |
+| ed pg.vcx                                              | `pg.vcx` is opened in the Class Browser  |
+| ed pg.scx.form.txtfind.keypress      | `pg.scx` is opened and editor presents the keypress method   |
+| ed pg.scx.form.txtfind.keypress:10                     | Same as above, cursor is on line 10         |
+| ed https:\/\/github.com/VFPX/Thor                      | Thor homepage opens in default browser      |
+| ed C:\Somefolder\Somefile.xlsx                         | `Somefile.xlsx` is opened in Excel        |
+| ed C:\Somefolder\Somemovie.mp4          | `Somemovie.mp4` is opened in default application        |
+| ed *file                    | Picklist of all VFP files in the path having `file` in its name |
+| ed \*my .prg                | As above, shows files matching `\*my\*.prg`            |
+| ed \*my pr .                | As above, both `my` and `pr`in the name or extension |
+| ed /my pr .                | Same as above, `/` and `*` are interchangeable |
+| ?                                         | Pandora Help (this document)                      |
+| #                                    | Picklist of projects in `Pandora.txt`                  |
+| -                                                      | Same as above                       |
+| menu                                                   | Same as above                        |
 | . (dot)                                                | Opens `Pandora.prg`  |
 | , (comma)                                              | Same as above                              |
 
@@ -178,6 +183,8 @@ Note that there are cases where you need to highlight the table name before you 
 ## INC
 
 This keyword is a helper to include a header file, .h, into your program. Type `inc` or `#inc` and press `F8`, and you get a dropdown list of all the .h files in your path.
+
+
 
 ### More "extras" to follow, suggestions are welcomed. 
 
