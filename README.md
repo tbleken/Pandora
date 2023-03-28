@@ -1,10 +1,27 @@
-## Thor tool *Pandora*
+![Pandora](https://user-images.githubusercontent.com/3491804/228252833-243894a4-77b2-41df-9e95-cd4b60aad444.png)
 
-**Thor Pandora** is a ***Swiss Army Knife&#8482;*** like tool for VFP programmers. In other word, a tool that contains several tools in one. More new features are planned for release later.  
+**Question:** How many tools and commands do you need to use, and how many keys do you have to press to do all of the following:  
+* List all the Fox files in your path, pick the right one and open it for editing or browsing?  
+* Open all the files you want in a project, including helper files?  
+* Browse a table or cursor which is named in your code?  
+* Run the code (line or block) where your cursor is?  
+* Add a description to all your program file, and quickly search them later  
+* Even more?
 
-To use it efficiently, assign a Hot Key to it, for instance `F8`. `F8` is used in this document. 
+Still curious? You need only ***One*** tool!  
 
-# Overview:
+--------------------------
+
+Introducing: ![Pandora](https://user-images.githubusercontent.com/3491804/228252833-243894a4-77b2-41df-9e95-cd4b60aad444.png), the ***Swiss Army Knife&#8482;*** like tool for VFP programmers.
+
+-------------------------
+
+**Thor Pandora** is a ***Swiss Army Knife&#8482;*** like tool for VFP programmers. In other word, a tool that contains several tools in one. More new features are planned for release later. 
+
+***Note:*** To use it efficiently, assign a Hot Key to it, for instance `F8`. `F8` is used in this document.   
+
+--------------------------------
+# ![Pandora](https://user-images.githubusercontent.com/3491804/228252833-243894a4-77b2-41df-9e95-cd4b60aad444.png) Overview:
 
 **Pandora** has many features, as seen in the list above, listed in no particular order. Most of these features take a whole line, and "interprets" it.  You enter some text, press `F8`, and the "magic" happens. Or the text is already stored in a "library" file, typically a .prg. 
 
