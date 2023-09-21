@@ -21,6 +21,14 @@ lcVersionFileURL  = m.lcDownloadsURL + 'PandoraVersion.txt' &&'PandoraVersion.tx
 lcZIPFileURL      = m.lcDownloadsURL + 'Pandora.zip'
 	&& the URL for the zip file containing the project
 
+Text to lcRegisterWithThor NoShow TextMerge
+    
+    Messagebox('Pandora installed"', 0 ,"Pandora installed", 5000)
+
+EndText
+
+lcRegisterWithThor = Strtran(lcRegisterWithThor, '@@@')
+
 * Set the properties of the passed updater object.
 
 with m.toUpdateObject
@@ -33,6 +41,8 @@ with m.toUpdateObject
 	.LinkPrompt           = 'Pandora Home Page'
 	.ProjectCreationDate  = date(2023, 9, 20)
 	.RegisterWithThor     = m.lcRegisterWithThor
+	.InstallInTools	      = .T.
+	.Dependencies		  = ''
 endwith
 
 return m.toUpdateObject

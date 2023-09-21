@@ -5,7 +5,7 @@ Lparameters lxParam1
 #Define ccContainerClassName  'clsPandoraSettings'
 #Define ccXToolName        'Pandora'
 #Define ccPandoraText      'Pandora default file'
-#Define ccPandoraHelp 'https://www.vfphelp.com/Thor/Pandora/pandora.html'
+#Define ccPandoraHelp 'https://github.com/tbleken/Pandora'
 #Define ccPandoraFile 'Pandora.pan'
 #Define ccRun 'exe'
 #Define ccPipe "|"
