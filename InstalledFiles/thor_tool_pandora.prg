@@ -34,6 +34,7 @@ If Pcount() = 1              ;
 
     * Required
     .Prompt       = [Pandora] && used in menus
+	.AppID        = [Pandora]     
 
     * Optional
     Text To .Description Noshow && a description for the tool
