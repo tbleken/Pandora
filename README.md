@@ -19,7 +19,7 @@
 |E|<a href="#ins">Ins </a> | <a href="#ins">Insert contents from a prg</a>|
 | |<a href="#no">No </a>   | <a href="#no">NewObject() syntax builder </a>|
 | |<a href="#pane">Pan </a>   | <a href="#no">Create and run your own `Pandora` extensions </a>|
-| |<a href="#pro">-na- </a>   | [Project organizer, see separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_project.md)|
+| |<a href="#pro">-na- </a>   | [Project organizer, see separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_proorg.md)|
 | |<a href="#ta">. (dot)  </a>  | <a href="#ta">Easily accessible "test area" </a>|
 | |<a href="#th">Th  </a>  | <a href="#th">Picklist of registered **Thor** tools</a>|
 
@@ -39,7 +39,7 @@
 
 ## Pandora project organizer </a>
 
-`Pandora` comes with a powerful and feature rich "project organizer", see [separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_project.md) for details!
+`Pandora` comes with a powerful and feature rich "project organizer", see [separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_proorg.md) for details!
 
 <a id="dir">
 
