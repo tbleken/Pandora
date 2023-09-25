@@ -1,7 +1,5 @@
-![Pandora](https://github.com/tbleken/Pandora/blob/main/documents/Images/pandora2.png)
 
-<!--
-![Pandora](pandora2.png)  -->
+![Pandora](https://github.com/tbleken/Pandora/blob/main/documents/Images/pandora2.png)
 
  Pandora provides a wide range of programmer tools, accessible either from a code window or the command window.  These tools are accessed by entering a few characters (commands) and then using the hotkey. Some of these programmer tools are unique to Pandora, others provide access to existing Thor tools.  
  
@@ -9,8 +7,7 @@
 
 |Note|Cmd | Result after pressing hotkey, `F8` used in this documentation|
 |:--|:--  |:-------------|
-||<a href="#rc">-na-</a>  | <a href="#sb">Run the code where your cursor </a>|
-||<a href="#sb">-na-</a>  | <a href="#sb">Browse a table or cursor </a>|
+||<a href="#rc">-na-</a>  | <a href="#rc">Run the code where your cursor </a>|
 |F|<a href="#dd">DD </a>   | <a href="#dd">DoDefault() syntax builder </a>|
 | |<a href="#desc">Desc</a>| <a href="#desc">List of all prg's which have a description</a>|
 | |<a href="#dir">Dir</a>  | <a href="#dir">List all VFP files in the path</a>|
@@ -22,6 +19,8 @@
 |E|<a href="#ins">Ins </a> | <a href="#ins">Insert contents from a prg</a>|
 | |<a href="#no">No </a>   | <a href="#no">NewObject() syntax builder </a>|
 | |<a href="#pane">Pan </a>   | <a href="#no">Create and run your own `Pandora` extensions </a>|
+| |<a href="#pro">-na- </a>   | [Project organizer, see separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_project.md)|
+| |<a href="#ta">. (dot)  </a>  | <a href="#ta">Easily accessible "test area" </a>|
 | |<a href="#th">Th  </a>  | <a href="#th">Picklist of registered **Thor** tools</a>|
 
 
@@ -29,18 +28,22 @@
 | |<a href="#pan">Pan </a> | <a href="#pan">Run or create custom Pandora extensions </a>|
 |C|<a href="#pr">Pr  </a>  | <a href="#pr">List of "projects" in active **Pandora** file</a>| -->
 
-**-na-** means that this feature is "automatic" doesn't need any "command".   
+**-na-** means special handling, see documentation for details.   
 
 **Note:** These commands works in all of VFP's editors, with these exceptions:  
 **C:** Works only in the Command window   
 **E:** Works only in a VFP code editor (Modi Comm, Class or Form Designer)  
 **F:** Works only in the Class or Form Designer  
-         
-<a href="https://github.com/tbleken/Pandora/tree/main/documents/Pandora_project.md"/> In addition `Pandora` comes with a powerful and feature rich "project organizer", see separate documentation. 
 
-<a id="dir">  
+<a id="pro" >  
 
-## 4. File Picklists (advanced Dir)</a>  
+## Pandora project organizer </a>
+
+`Pandora` comes with a powerful and feature rich "project organizer", see [separate documentation. ](https://github.com/tbleken/Pandora/tree/main/documents/Pandora_project.md) for details!
+
+<a id="dir">
+
+## File Picklists (advanced Dir)</a>  
 
 **Pandora** comes with a nice "file finder" with several options.  
 The simplest syntax is `*` which finds all the VFP related files in your path. Pick one with the arrow keys or the mouse, or start typing, and press **Enter**.  
@@ -64,7 +67,8 @@ To start with a more limited selection of files, you can specify one or more "wo
 
 <a id="dirc">  </a>
 
-**Option 1:**  `dirc:` two more columns are added, `lines` and `text`. The contents of **all** .prg, .txt and .h files, and the corresponding number of lines, are read into the `text` and `lines` columns.  
+### Option 1: Dirc
+`dirc` adds two more columns, `lines` and `text`. The contents of **all** .prg, .txt and .h files, and the corresponding number of lines, are read into the `text` and `lines` columns.  
 
 This gives two big advantages:  
 1. The incremental search also includes the contents of the files.
@@ -79,8 +83,11 @@ Sample:
 
 **Comment:** This feature is *not* default since it will in many cases show "unwanted" files when incremental search is used.
 
-<a id="dirr">  </a>
-**Option 2:** `dirr:` the record count for **all** VFP tables will be added, including dbc, frx, lbx, scx, vcx, pjx and mnx. This is very handy for evaluating the complexity of unknown projects.  
+<a id="dirr">  
+
+### Option 2: Dirr </a>
+
+`dirr:` adds the record count for **all** VFP "tables", including dbc, frx, lbx, scx, vcx, pjx and mnx. This is very handy for evaluating the complexity of unknown projects.  
 
 Sample:  
 
@@ -94,7 +101,7 @@ Sample:
 **Comment:** This feature is *not* default since it slows down the process considerably, and the extra information is only needed in special cases. Also note that it does include deleted records, in other words it does *not* respect *Set Deleted*.
 
 
-**Option 3:** You can combine option 1 and option 2:
+**Note:** You can combine option 1 and option 2:
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
@@ -113,9 +120,10 @@ In the Command Window you can type a single `*` instead of `dir`. Additional cha
 | \*:rc        | Combination of all the above|
 | \*:cr        | Same as above|
 
-**Comment:** Note the colon, `:`, to enable the options.
+**Comment:** Note the colon, `:`, it's necessary to enable the options in the command window.
 
-## 5. Your easy accessible testing area `Pandora.prg`  
+<a id="ta" > 
+## Your easy accessible testing area `Pandora.prg`  </a>
 `Pandora.prg` is initially an empty file. The purpose is to have *one* file to use during your development and testing. If the first line is `Return`, no harm is done if you accidentally run it.  
 
 This file is also a perfect place to store `Pandora` "commands" to 
@@ -130,7 +138,7 @@ This file is also a perfect place to store `Pandora` "commands" to
 
 <a id="th" >  
 
-## 6. Select the right Thor tool from a picklist, with incremental search </a>
+## List all registered Thor tool, with incremental search </a>
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
@@ -144,7 +152,7 @@ Note that some tools may not be relevant from where you are in the IDE, in which
 
 <a id="hk" >
 
-## 6a. List all your assigned hotkeys (also with incremental search) </a>
+## List all your assigned hotkeys ,with incremental search </a>
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
@@ -155,7 +163,7 @@ Press **Enter** to run the selected tool
 
 
 
-## 7. Help  
+## Help  
 No explanation necessary, will bring up this file.
 
 | You type:                |        Result after pressing `F8`                                |
@@ -169,7 +177,13 @@ No explanation necessary, will bring up this file.
 
 ## DD (DoDefault builder)</a>  
 
-In a method in the Form Designer or the Class Editor, a Dodefault() call must include the same parameters as the method accepts. This "helper" will add these parameters automatically! Just type `dd` and press `F8`, and you're done!  
+In a method in the Form Designer or the Class Editor, a Dodefault() call must include the same parameters as the method accepts. 
+
+| You type:                |        Result after pressing `F8`                                |
+|:-------------------------|:----------------------------------------------------------|
+| dd                     | A DeDefault statement is added including all required parameters|
+ 
+ 
 
 **Note:** This tool only works in the Class or Form Designer.
 
@@ -196,6 +210,8 @@ The last sample shows the syntax to call an object's NewObject method.
 
 **Note 1:** In the Command window, no Local declaration is added.  
 **Note 2:** `No` calls an external "dynamic snippet", which is why the results show in a popup instead of a grid.
+
+
 <a id="rc">
 ## Execute Selected Text </a>
 
@@ -219,7 +235,7 @@ The new way: Place the cursor anywhere inside the line/statement, and press `F8`
 
 
 
-<a id="superbrowse">
+<a id="sb">
 
 ## Call SuperBrowse </a>
 **Pandora** can call [SuperBrowse](https://github.com/VFPX/Thor/blob/master/Docs/Thor_superbrowse.md) directly.  
@@ -243,8 +259,10 @@ This keyword is a helper to include a header file, .h, into your program. Type `
 Note the space character in the last sample, it's *not* optional.
 
 The result after pressing **Enter** is `#include yourfile.h`
-<a id="descript">
-## Descriptions in your prgs </a>
+
+<a id="desc">
+
+## Descriptions in your prgs </a>  
 
 **Pandora** Keyword `Desc`
 
