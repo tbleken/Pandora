@@ -35,8 +35,8 @@
 **C:** Works only in the Command window   
 **E:** Works only in a VFP code editor (Modi Comm, Class or Form Designer)  
 **F:** Works only in the Class or Form Designer  
-
-<a href="https://github.com/tbleken/Pandora/tree/main/documents/pandora_project.md"/> In addition `Pandora` comes with a powerful and feature rich "project organizer", see separate documentation. 
+         https://github.com/tbleken/Pandora/blob/main/documents/Pandora_project.md
+<a href="https://github.com/tbleken/Pandora/blob/main/documents/pandora_project.md"/> In addition `Pandora` comes with a powerful and feature rich "project organizer", see separate documentation. 
 
 <a id="dir">  
 
