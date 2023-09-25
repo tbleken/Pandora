@@ -1,4 +1,4 @@
-![Pandora](https://user-images.githubusercontent.com/3491804/228252833-243894a4-77b2-41df-9e95-cd4b60aad444.png)
+![Pandora](https://github.com/tbleken/Pandora/blob/main/documents/Images/pandora2.png)
 
 <!--
 ![Pandora](pandora2.png)  -->
