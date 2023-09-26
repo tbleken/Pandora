@@ -1,5 +1,4 @@
-
-![Pandora](https://github.com/tbleken/Pandora/blob/main/documents/Images/pandora2.png)
+![Pandora](documents/Images/pandora2.png)
 
  Pandora provides a wide range of programmer tools, accessible either from a code window or the command window.  These tools are accessed by entering a few characters (commands) and then using the hotkey. Some of these programmer tools are unique to Pandora, others provide access to existing Thor tools.  
  
