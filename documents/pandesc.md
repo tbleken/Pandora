@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)]([../readme.md](https://github.com/tbleken/Pandora))
+[![Pandora](Images/pandora2.png)](../readme.md)
 
 ## Descriptions in your prgs
 
