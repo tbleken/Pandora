@@ -11,7 +11,7 @@ If your program files contains a description in one of the ten first lines, **Pa
 
 #### Syntax samples: 
 
-| Window | You type:  | Resukt after pressing `F8`|
+| Window | You type:  | Result after pressing `F8`|
 |-------|:----------|:----------------------|
 | C | `Desc`           | You get a list of all prgs in your path which have a description|
 | C | `Desc aaa` | List of files where the descriptions contains `aaa`|
