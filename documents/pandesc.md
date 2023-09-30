@@ -19,4 +19,6 @@ If your program files contains a description in one of the ten first lines, **Pa
 
 
 `C`: Command Window  
-`E`: Any VFP editor, normally Modify Command 
+`E`: Any VFP editor, normally Modify Command  
+
+![Desc](Images/Pandesc.png)

@@ -20,3 +20,5 @@ The last sample shows the syntax to call an object's NewObject method.
 
 **Note 1:** In the Command window, no Local declaration is added.  
 **Note 2:** `No` calls an external "dynamic snippet", which is why the results show in a popup instead of a grid.
+
+![no](Images/panno.png)

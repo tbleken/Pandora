@@ -8,3 +8,5 @@
 | hk    | Same as above|  
 
 Press **Enter** to run the selected tool
+
+![hk](Images/panhk.png)

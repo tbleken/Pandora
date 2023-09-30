@@ -15,10 +15,10 @@
 | |[Description](documents/pandesc.md)|[Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
 | |[Dir](documents/pandir.md)  || [List all VFP files in the path](documents/pandir.md)|
 |C |[Dir](documents/pandir.md)  |[*](documents/pandir.md)| [List all VFP files in the path](documents/pandir.md)|
-| |[Dirc](documents/pandir.md) || [List all VFP files in the path with the  contents](documents/pandir.md)||
-|C |[Dirc](documents/pandir.md) |[*:c](documents/pandir.md)| [List all VFP files in the path with the  contents](documents/pandir.md)||
-| |[Dirr](documents/pandir.md) || [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md)|
-|C |[Dirr](documents/pandir.md) |[*:r ](documents/pandir.md)| [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md)|
+| |[Dirc](documents/pandir.md#dirc) || [List all VFP files in the path with the  contents](documents/pandir.md#dirc)||
+|C |[Dirc](documents/pandir.md#dirc) |[*:c](documents/pandir.md#dirc)| [List all VFP files in the path with the  contents](documents/pandir.md#dirc)||
+| |[Dirr](documents/pandir.md#dirr) || [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
+|C |[Dirr](documents/pandir.md#dirr) |[*:r ](documents/pandir.md#dirr)| [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
 |E|[Eval](documents/paneval.md)|[=](documents/paneval.md)| [Insert returned value from a function](documents/paneval.md)|
 |C |Help ||This document|
 | |[Hotkeys](documents/panhk.md) |[Hk](documents/panhk.md) |[List of all assigned hot keys](documents/panhk.md)|
@@ -28,7 +28,7 @@
 | |[No](documents/panno.md) || [NewObject() syntax builder ](documents/panno.md)|
 | |[Pan](documents/panext.md) |[!](documents/panext.md)| [Create and run your own `Pandora` extensions](documents/panext.md)|
 | |[Paned](documents/panext.md#paned) |[!!](documents/panext.md#paned)| [Edit your own `Pandora` extensions](documents/panext.md#paned)|
-| |[Project](documents/panorg.md) |[Pr, Proj](documents/panorg.md)| [List of projects in active .pan file ](documents/Pandora_proorg.md)|
+| |[Project](documents/panorg.md#proj) |[Pr, Proj](documents/panorg.md#proj)| [List of projects in active .pan file ](documents/Pandora_proorg.md#proj)|
 | |[Ta](documents/Panta.md)|[. (dot)](documents/Panta.md)| [Easily accessible "test area"](documents/Panta.md)|
 | |[Thor](documents/panth.md) |[Th, Tools](documents/panth.md)| [Picklist of registered **Thor** tools](documents/panth.md)|
 | |Version |Ver| Shows `Pandora` version number|

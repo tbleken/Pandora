@@ -24,6 +24,8 @@ Type the same as mentioned above, `!xxx`, and press `F8`. **Pandora** will locat
 
 Select the one you want, and press **Enter** to run it.
 
+![ext](Images/panext.png)
+
 <a id="paned">
 
 #### To modify a **Pandora** extension:  </a>
@@ -37,3 +39,6 @@ Select the one you want, and press **Enter** to run it.
 | paned xxx| Same as above (note the space after `paned` |
 
 Select the one you want to edit, and press **Enter**.
+
+![exted](Images/panexted.png)
+

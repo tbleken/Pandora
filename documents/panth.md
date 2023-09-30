@@ -11,3 +11,5 @@
 The list has incremental search to narrow the selection. Pick the wanted tool, and press **Enter** to run it. 
 
 **Note:** some tools may not be relevant from where you are in the IDE, in which case the tool won't start, or you will get a warning or an error.
+
+![Thor](Images/panthor.png)

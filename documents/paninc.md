@@ -12,5 +12,8 @@ This keyword is a helper to include a header file, .h, into your program. Type `
 
 Note the space character in the last sample, it's *not* optional.
 
+![inc](Images/paninc.png)
+
 The result after pressing **Enter** is `#include yourfile.h`
+
 

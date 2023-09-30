@@ -1,7 +1,7 @@
 [![Pandora](Images/pandora2.png)](../readme.md)
 ## File Picklists (advanced Dir)</a>  
 
-**Pandora** comes with a nice "file finder" with several options.  
+**Pandora** comes with a nice "file finder" with several options. For instance it will show the number of records in all DBF's plus the size of the corresponding memo file.    
 The simplest syntax is `*` which finds all the VFP related files in your path. Pick one with the arrow keys or the mouse, or start typing, and press **Enter**.  
 
 To start with a more limited selection of files, you can specify one or more "words" from the file name. If the "words list" contains a `.` (dot), you can also specify the extension. In that case also non VFP files are included in the search.  
@@ -21,9 +21,11 @@ To start with a more limited selection of files, you can specify one or more "wo
 **C:** Command Window   
 **E:** program editor (Modify Command) and the text editor (Modify File) 
 
-<a id="dirc">  </a>
+![dir](Images/pandir.png)
 
-### Option 1: Dirc
+<a id="dirc">  
+
+### Option 1: Dirc </a>
 `dirc` adds two more columns, `lines` and `text`. The contents of **all** .prg, .txt and .h files, and the corresponding number of lines, are read into the `text` and `lines` columns.  
 
 This gives two big advantages:  
@@ -38,6 +40,8 @@ Sample:
 | dirc my        | Same as above, only files matching *my* are shown|
 
 **Comment:** This feature is *not* default since it will in many cases show "unwanted" files when incremental search is used.
+
+![dirc](Images/pandirc.png)
 
 <a id="dirr">  
 
@@ -56,13 +60,18 @@ Sample:
 
 **Comment:** This feature is *not* default since it slows down the process considerably, and the extra information is only needed in special cases. Also note that it does include deleted records, in other words it does *not* respect *Set Deleted*.
 
+![dirr](Images/pandirr.png)
 
 **Note:** You can combine option 1 and option 2:
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
 | dirrc        | Number of records as described above, *and* program code is added|
-| dircr      | Same as above |
+| dircr      | Same as above |  
+
+![dircr](Images/pandircr.png)
+
+
 
 **Shortcut in the Command Window:**  
 In the Command Window you can type a single `*` instead of `dir`. Additional characters are allowed to narrow the result set. 

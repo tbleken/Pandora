@@ -149,7 +149,13 @@ Likewise, a URL will be opened in the default Browser.
 
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
 
-<a id="suggest">  
+<a id="proj">
 
-# More "extras" to follow, suggestions are welcomed! </a>
+## 4. List of active "projects"  </a>
 
+| Command| Short                |        Result after pressing `F8`                                |
+|:-------|:------------------|:----------------------------------------------------------|
+| project| pr | List of "projects" in the active .pan file|
+
+  
+![Project](Images/panproj.png)

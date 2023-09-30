@@ -1,4 +1,5 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)  
+
 ## DD (DoDefault builder)  
 
 In a method in the Form Designer or the Class Editor, a Dodefault() call must include the same parameters as the method accepts. This tool automatically adds the correct parameter list.
