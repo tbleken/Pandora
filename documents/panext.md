@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora/readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 ## Create your own *Pandora* extensions
 
 The key to using your own **Pandora** extensions, is to remember the `!` symbol. Think "VFP uses ! as shortcut for **run**".  
