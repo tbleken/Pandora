@@ -10,7 +10,7 @@
 |E|[-na-](documents/panrc.md)  || [Run the code where your cursor is](documents/panrc.md)|
 |C|[-blank-](documents/panorg.md)  || [Opens default files listed in active .pan file](documents/panorg.md)|
 |E|[-blank-](documents/panmnu.md)  || [Menu of relevant Pandora options](documents/panmnu.md)|
-|C |[0 (zero)](documents/panorg.md) || [Opens active .pan file for editing ](documents/Pandora_proorg.md)|
+|C |[0 (zero)](documents/panorg.md) || [Opens active .pan file for editing ](documents/Panorg.md)|
 |F|[DD](documents/pandd.md)     || [DoDefault() syntax builder](documents/pandd.md)|
 | |[Description](documents/pandesc.md)|[Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
 | |[Dir](documents/pandir.md)  || [List all VFP files in the path](documents/pandir.md)|
