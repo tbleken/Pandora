@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 ## Insert the code from another prg 
 
 Often you want to insert the code from another prg into the active file. Typically this is a small code snippet or a function. Or it can be a header file. With **Pandora** this is extremely simple:

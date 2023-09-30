@@ -1,4 +1,5 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
+
 ## File Picklists (advanced Dir)</a>  
 
 **Pandora** comes with a nice "file finder" with several options. For instance it will show the number of records in all DBF's plus the size of the corresponding memo file.    

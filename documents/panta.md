@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 
 ## Your easy accessible testing area `Pandora.prg`  
 `Pandora.prg` is initially an empty file. The purpose is to have *one* file to use during your development and testing. If the first line is `Return`, no harm is done if you accidentally "do" it.  

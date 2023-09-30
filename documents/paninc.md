@@ -1,5 +1,5 @@
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 
-[![Pandora](Images/pandora2.png)](../readme.md)
 ## INC #Include helper
 
 This keyword is a helper to include a header file, .h, into your program. Type `inc` or `#inc` and press `F8`, and you get a dropdown list of all the .h files in your path.

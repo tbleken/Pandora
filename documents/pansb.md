@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 ## SuperBrowse 
 **Pandora** can call [SuperBrowse](https://github.com/VFPX/Thor/blob/master/Docs/Thor_superbrowse.md) directly.  
 

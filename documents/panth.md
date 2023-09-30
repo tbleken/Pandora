@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](../readme.md)
+[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 
 ## List all registered Thor tools, with incremental search 
 
