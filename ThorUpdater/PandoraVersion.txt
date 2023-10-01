@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.00 - 20230921'
-	.AvailableVersion = 'Pandora-1.00-08664-20230921'
+	.VersionNumber    = '1.01 - 20231001'
+	.AvailableVersion = 'Pandora-1.01-08674-20231001'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith

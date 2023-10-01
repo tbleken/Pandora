@@ -10,7 +10,7 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.00.00'
+#Define ccVersion '1.00.01'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
@@ -34,7 +34,6 @@ If Pcount() = 1              ;
 
     * Required
     .Prompt       = [Pandora] && used in menus
-	.AppID        = [Pandora]     
 
     * Optional
     Text To .Description Noshow && a description for the tool
@@ -126,6 +125,17 @@ Function ProcessText
       _Screen.lPanComment = .T.
     Endif
   Endif
+  Do Case
+    Case Getwordnum(m.tcLine, 1) = [dircr]
+      m.tcLine = Stuff(m.tcLine, 0, 5, [dir:cr])
+    Case Getwordnum(m.tcLine, 1) = [dirrc]
+      m.tcLine = Stuff(m.tcLine, 0, 5, [dir:rc])
+    Case Getwordnum(m.tcLine, 1) = [dirr]
+      m.tcLine = Stuff(m.tcLine, 0, 4, [dir:r])
+    Case Getwordnum(m.tcLine, 1) = [dirc]
+      m.tcLine = Stuff(m.tcLine, 0, 4, [dir:c])
+  Endcase
+
   m.lcCommand = Lower(Getwordnum(m.tcLine, 1))
   m.lcParam1 = Ltrim(Strextract(m.tcLine, m.lcCommand, [], 1, 1))
   m.lcOption = Getwordnum(Strextract(m.tcLine, [:], []), 1)
@@ -167,7 +177,7 @@ Function ProcessText
       Endcase
     Case m.lnWindowType = 0 And Inlist(m.lcCommand, [pr], [proj], [project])
       ListProjects()
-    Case Inlist(m.lcCommand, [menu], [?]) Or (m.lnWindowType > 0 And m.lcCommand = [ed] And Empty(m.lcParam1 ))
+    Case Inlist(m.lcCommand, [menu]) Or (m.lnWindowType > 0 And m.lcCommand = [ed] And Empty(m.lcParam1 )) Or (m.lcCommand == [?] And Empty(m.lcParam1))
       CreatePandoraCursor(m.lnWindowType )
     Case Inlist(m.lcCommand, [ver], [version])
       Messagebox( [Version # ] + ccVersion, 64, [Pandora])
@@ -193,7 +203,7 @@ Function ProcessText
       ListAllCustomTools(Substr(m.lcCommand, 2) )
     Case m.lcCommand == [pan]
       ListAllCustomTools(m.lcParam1 )
-    Case Inlist(m.lcCommand, [.], [,])
+    Case Inlist(m.lcCommand, [.], [,], [ta],[test])
       RunEd([Pandora.prg])
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And Empty(m.lcParam1) And m.lcCommand = [0] && and m.lnWindowType = 0
       CutCurrentLine()
@@ -222,7 +232,7 @@ Function ProcessText
     Case m.lnWindowType > 0 And (Left(m.lcCommand, 4) = [#inc] Or Left(m.lcCommand, 3) = [inc])
       GetHeader(m.lcCommand, m.lcParam1  )
     Case Inlist(m.lcCommand, [br], [browse])
-      m.lcdata = GetDataFromGrid(Dbf(), [])
+      m.lcdata = GetDataFromGrid(Dbf(), [], ,.T.)
     Case m.lcCommand == [no]
       m.lcParam1 = Trim(m.lcParam1, 0, Chr(13), Chr(10), Chr(9))
       Execscript(_Screen.cThorDispatcher, [peme_snippet_no], m.lcParam1 )
@@ -381,7 +391,7 @@ Procedure ListDescript
   Endif
   If ccWantGrid And File([pg.vcx])
     Go Top
-    m.lcSelected = GetDataFromGrid([Fields with description], [Filename], 1)
+    m.lcSelected = GetDataFromGrid([Prg files with description], [Filename], 1)
     If !Empty(m.lcSelected)
       refreshCommandWindow([ed ] + m.lcSelected, m.tcCommand + [ ] + m.tcText )
     Endif
@@ -441,7 +451,8 @@ Procedure ListFiles
   Endif
   If m.lnFiles = 0
     Return
-  Endif
+  EndIf
+*!*    Browse Normal 
   Update (ccCursorfiles) Set Fname = [ ] + Fname Where Empty(Justpath(Fname))
   If m.tcFilter = [*]
     Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (ccCursorfiles) ;
@@ -473,6 +484,7 @@ Procedure ListFiles
   m.llRecords = m.laDummy  > 0
   If m.llRecords And Empty(Field([records]))
     Alter Table (ccCursorfiles) Add Column RecordS i
+    Alter Table (ccCursorfiles) Add Column MemoSize i
   Endif
   If [r] $ m.lcOption
     Set Filter To Inlist(Lower(Justext(Filename)), ccVFPTablesExtended)
@@ -481,6 +493,7 @@ Procedure ListFiles
   Endif
   Scan For RecordS = 0
     Replace RecordS With GetRecordsInDBF(FullName)
+    Replace MemoSize with GetMemoSize(FullPath(Fullname))
   Endscan
   Set Filter To
   If [c] $ m.lcOption
@@ -490,6 +503,7 @@ Procedure ListFiles
   Endif
   If !Empty(Field([records]))
     Index On RecordS Tag RecordS
+    Index on Memosize tag MemoSize
   Endif
   Index On Upper(FullName) Tag FullName
   Index On Upper(Filename) Tag Filename
@@ -562,8 +576,29 @@ Function GetRecordsInDBF
     Endtry
   Endtry
   Return m.lnRec
+EndFunc 
+**********************************************************************
+Function GetMemoSize
+  Lparameters tcFileDBF
+  Local laDummy[1], lcFileMemo, lnFiles, lnReturn
 
-  **********************************************************************
+  Do Case
+    Case Lower(Justext(m.tcFileDBF)) = [dbf]
+      m.lcFileMemo = Forceext(m.tcFileDBF, [fpt])
+    Case Lower(Justext(m.tcFileDBF)) = [dbc]
+      m.lcFileMemo = Forceext(m.tcFileDBF, [dct])
+    Case Inlist(Lower(Justext(m.tcFileDBF)), [vcx], [scx], [frx], [lbx], [mnx], [pjx])
+      m.lcFileMemo = Forceext(m.tcFileDBF, Left(Lower(Justext(m.tcFileDBF)), 2) + [t])
+  Endcase
+  m.lnFiles = Adir(laDummy, m.lcFileMemo)
+  If m.lnFiles = 1
+    m.lnReturn = m.laDummy(1, 2)
+  Else
+    m.lnReturn = 0
+  Endif
+  Return m.lnReturn
+Endfunc
+**********************************************************************
 Function GetThorFiles
   Lparameters tcMask, tcCursor
   Local laDummy[1], laFolders[1], lcFileSkel, lnFiles, lnFolders, lnX, lnX2
@@ -667,22 +702,15 @@ Function GetHeader
   If GetFilesInPath([H], ccCursorfiles) = 0
     _Cliptext = _Screen.cClip
     Return
+  EndIf
+  If !Empty(m.tcParameter)
+    Select * from (ccCursorfiles) into cursor (ccCursorfiles) readwrite where Alltrim(Lower(m.tcParameter))$Lower(fname)
   Endif
-  m.loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
-  m.lnPos = m.loEditorWin.GetSelend() - 1
-  m.loEditorWin.Select(m.lnPos, m.lnPos )
-  m.lcTextOriginal = Trim(CutCurrentLine(), 0, Chr(13), Chr(10))
-  Select Fname, Justfname(Fname) From (ccCursorfiles) Into Array laList
-  WriteCurrentLine(m.lcTextOriginal)
-  Execscript (_Screen.cThorDispatcher, [Thor_Proc_DropDown], @m.laList)
-  If Lastkey() = 27
-    ReturnUnknownCommand()
+  lcText = GetDataFromGrid('Select file',ccCursorfiles+ '.fname') 
+  If !Empty(m.lcText)
+    WriteCurrentLine('#Include ' + m.lcText + ccCR)
+    CutCurrentLine()
   Endif
-  HighlightCurrentLine()
-  m.loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
-  m.loEditorWin.Cut()
-  m.loEditorWin.Insert([#Include ] + Getwordnum(_Cliptext, Getwordcount(_Cliptext)))
-
 Endfunc
 **********************************************************************
 Function TryExecute(tcParameter)
@@ -1066,9 +1094,13 @@ Procedure BrowseAllTools
 Endproc
 ****************************************************************
 Function GetDataFromGrid
-  Lparameters tcCaption, tcReturnField, tnHideColumns, tnWidth
+  Lparameters tcCaption, tcReturnField, tnHideColumns, tlModeless
   Local lcHideColumns, lcParameter, lcReturn, lcVCXFile
-
+  Local loPg As pg Of (_Screen.Cthorfolder) + [tools\procs\thor_proc_pandora.vcx]
+  Local lnModeless
+  m.tnHideColumns = Evl(m.tnHideColumns, 0)
+  m.lnModeless = Iif(Empty(m.tlModeless), 1, 2)
+  *!*    Wait Window at 1,1 m.lnModeless 
   m.lcReturn = []
   If !Empty(Dbf())
     m.lcVCXFile = Execscript(_Screen.cThorDispatcher, [Full Path=] + [thor_proc_pandora.VCX])
@@ -1078,15 +1110,18 @@ Function GetDataFromGrid
     m.loPg.Caption = Alltrim(m.tcCaption)
     m.loPg.nIncStart = 0
     m.loPg.lShowZero = .F.
-    If !Empty(m.tnWidth) And Vartype(m.tnWidth) = [N]
-      m.loPg.Width = m.tnWidth
-    Endif
-    m.loPg.Show(1)
+    *!*      If !Empty(m.tnWidth) And Vartype(m.tnWidth) = [N]
+    *!*        m.loPg.Width = m.tnWidth
+    *!*      Endif
+    m.loPg.Show(m.lnModeless )
+    If m.lnModeless = 2
+      Read Events
+    EndIf
     If !Inlist(Lastkey(), 97, 33) And !Empty(m.tcReturnField)
       m.lcReturn = Alltrim(Evaluate(m.tcReturnField))
-    EndIf
+    Endif
   Else
-    messagebox( "No table or cursor is selected",0+48, 'Pandora grid')
+    Messagebox( [No table or cursor is selected], 0 + 48, [Pandora grid])
   Endif
   Return m.lcReturn
 Endfunc
@@ -1237,33 +1272,92 @@ Function GetDescript
   Return m.lcDescript
 Endfunc
 ****************************************************************
-Procedure InsertMethod
+Function InsertMethod
   Lparameters tcMethod
+  Local laProc[1], lcCode, lcMethod, lcProc, lcSource, lcText, lnProcs, lnSelect, lnX
 
-  Local lcText
-
-  m.lcText = []
-  If Empty(Justext(m.tcMethod))
-    Do Case
-      Case File(Forceext(m.tcMethod, [prg]))
-        m.tcMethod  = Forceext(m.tcMethod, [prg])
-      Case File(Forceext(m.tcMethod, [h]))
-        m.tcMethod  = Forceext(m.tcMethod, [h])
-      Otherwise
-        *
-    Endcase
-  Endif
-  If File(m.tcMethod)
-    m.lcText = Filetostr(m.tcMethod)
-  Endif
-  If !Empty(m.lcText)
-    WriteCurrentLine(m.lcText + ccCR )
-    CutCurrentLine()
+  m.lcCode = []
+  If Inlist(Lower(Justext(m.tcMethod)), [prg], [h])
+    If File(m.tcMethod)
+      m.lcCode = Filetostr(m.tcMethod)
+    Else
+      Messagebox( [File not found!], 48, Alltrim(m.tcMethod))
+    Endif
   Else
-    Messagebox( [No text is inserted], 0 + 48, m.tcMethod)
+    m.lcMethod = Alltrim(Lower(m.tcMethod))
+    m.lcText = []
+    m.lnSelect = Select()
+    Create Cursor CurMethods (Method c(200), Source c(200), Code m)
+    GetFilesInPath([prg], [curPrgs])
+    Scan
+      m.lcSource = curprgs.Fname
+      m.lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
+      For m.lnX = 1 To m.lnProcs
+        If m.laProc(m.lnX, 3) = [Procedure] And ![.] $ m.laProc(m.lnX, 1) And (m.lcMethod $ m.laProc(m.lnX, 1) Or Empty(m.lcMethod))
+          m.lcProc = m.laProc(m.lnX, 1)
+          m.lcCode = methodfromprg(m.lcProc, m.lcSource)
+          Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcProc, m.lcCode )
+        Endif
+      Endfor
+    Endscan
+    Select CurMethods
+    Index On Lower(Method) Tag Method
+    Locate
+    If Reccount()>0
+      m.lcCode = GetDataFromGrid([Select method to insert], [curmethods.code])
+    Else 
+      messagebox( 'No match found!',48,m.tcMethod)
+    Endif
+    Select (m.lnSelect)
+    m.lcMethod = Trim(CurMethods.Method)
+    m.lcSource = Trim(CurMethods.Source )
+    Use In Select([curmethods])
+    Use In Select([curprgs])
+  Endif
+  If !Empty(m.lcCode)
+    WriteCurrentLine(m.lcCode + ccCR )
+    CutCurrentLine()
   Endif
 
-Endproc
+Endfunc
+
+********************************************************************
+Function methodfromprg
+  Lparameters tcProcedure, tcFile
+  Local laDummy[1], lcFile, lcProc, lcReturn, lnEnd, lnStart, lnX
+  Local lnSelect
+  m.lnSelect = Select()
+  m.lcProc = Lower(Padr(m.tcProcedure, 100))
+  m.lcFile = Forceext(m.tcFile, [prg])
+  m.lnX = Aprocinfo(laDummy, m.lcFile, 0)
+  m.lcReturn = []
+  If m.lnX > 0.
+    Create Cursor curDummy (Name c(100), Line i, Type c(25), ind i)
+    Append From Array m.laDummy
+    Select Name, Line From curDummy Into Cursor curDummy Readwrite Where Type = [Procedure]
+    Locate For Lower(Name) == m.lcProc
+    If Found()
+      m.lnStart = Line
+      Skip
+      m.lnX = Alines(laDummy, Filetostr(m.lcFile ))
+      If !Eof([curdummy])
+        m.lnEnd = Line - 1
+      Else
+        m.lnEnd = m.lnX
+      Endif
+      If m.lnX > 0
+        m.lcReturn = []
+        For m.lnX = m.lnStart To m.lnEnd
+          m.lcReturn  = m.lcReturn + Trim(m.laDummy(m.lnX )) + Chr(13)
+        Endfor
+      Endif
+    Endif
+    Use In Select([curdummy])
+  Endif
+  Select (m.lnSelect)
+  Return m.lcReturn
+Endfunc
+
 ****************************************************************
 Procedure AddLinesAndText
   Local lnMemo
@@ -1314,29 +1408,30 @@ Function CreatePandoraCursor
   Local laPandoraChoices[1], lcPandoraOptions, lnLines, lnX
   m.lnSelect = Select()
   Text To m.lcPandoraOptions Noshow Textmerge Pretext 7
-      Dir    |    | Picklist of all VFP files in the path              | ce |    |
+      Dir    |    | Picklist of all VFP files in the path              | cef |    |
       *      |    | Picklist of all VFP files in the path              | c |    |
-      Dir:r  |    | Picklist of VFP files with reccount for all tables | ce |    |
+      Dirr  |    | Picklist of VFP files with reccount for all tables | cef |    |
       *:r    |    | Picklist of VFP files with reccount for all tables | c  |    |
-      Dir:c  |    | Picklist of VFP files fields with the contents     | ce |    |
+      Dirc  |    | Picklist of VFP files with the contents            | cef |    |
       *:c    |    | Picklist of VFP files fields with the contents     | c  |    |
       Desc   |    | Picklist of prg files with a description           | c  |    |
-      Desc   |    | Adds "* Description *" template to the active file | e  |    |
-      <blank>|    | Opens default files listed in "ccPandoraFile"      | c  |    |
-      <blank>|    | Menu                                               | e  |    |
-      0      |    | Opens "ccPandoraFile" for editing                  | c  |    |
-      Menu   | ?  | Menu                                               | e  |    |
+      Desc   |    | Adds "* Description *" template to the active file | ef  |    |
+      <blank>|    | Opens default files listed in active .pan file      | c  |    |
+      <blank>|    | Menu                                               | ef  |    |
+      0      |    | Opens active .pan file for editing                  | c  |    |
+      Menu   | ?  | Menu                                               | ef  |    |
       Project|pr  | Picklist of projects in active .pan file           | c  |    |
-      Help   |    | Opens Pandora page in the default Browser          | ce |    |
-      Inc    |    | Picklist of header files                           | e  |    |
-      Ins    | +  | Inserts contents from prg                          | e  |    |
-      Eval   | =  | Inserts return value from function                 | e  |    |
-      No     |    | NewObject syntax builder                           | ce |    |
-      Dd     |    | DoDefault() syntax builder                         | f  |    |
-      Pan    | !  | Run or create custom made Pandora extensions       | ce | !  |
-      Paned  | !! | Edit custom made Pandora extensions                | ce | !! |
-      Thor   | th | Picklist of registered Thor tools                  | ce | th |
-      Hotkeys| hk | Picklist of registered Thor tools                  | ce | hk |
+      Help   |    | Opens Pandora page in the default Browser          | cef |    |
+      Inc    |    | Insert #Include statement from Picklist of .h files| ef  |    |
+      Ins    | +  | Inserts contents from prg                          | ef  |    |
+      Eval   | =  | Inserts return value from function                 | ef  |    |
+      No     |    | NewObject syntax builder                           | cef |    |
+      DD     |    | DoDefault() syntax builder                         | f  |    |
+      Pan    | !  | Run or create custom made Pandora extensions       | cef | !  |
+      Paned  | !! | Edit custom made Pandora extensions                | cef | !! |
+      Ta     | .  | Test area "pandora.prg"                            | cef ||
+      Thor   | th | Picklist of registered Thor tools                  | cef | th |
+      Hotkeys| hk | Picklist of all assigned hot keys                  | cef | hk |
   Endtext
   Create Cursor curPandora (Trigger c(10), Short c(5), Descript c(50),  Window c(2))
   m.lnLines = Alines(laPandoraChoices, m.lcPandoraOptions)
@@ -1381,7 +1476,6 @@ Endfunc
 
 
 ****************************************************************
-
 Define Class clsSetPandoraFile As Custom
 
   Tool      = ccXToolName
