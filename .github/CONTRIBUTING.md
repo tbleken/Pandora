@@ -1,7 +1,7 @@
-# How to contribute to GoToDefinition
+# How to contribute to Pandora
 
 ## Bug report?
-- Please check [issues](https://github.com/VFPX/ObjectExplorer/issues) if the bug is reported
+- Please check [issues](https://github.com/tbleken/Pandora/issues) if the bug is reported
 - If you're unable to find an open issue addressing the problem, open a new one. Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
 
 ### Did you write a patch that fixes a bug?
@@ -33,4 +33,6 @@ Here are the steps to updating to a new version:
 10. Create a pull request
 
 ---
-Last changed: _2023/03/11_ ![Picture](../documents/Images/vfpxpoweredby_alternative.gif)
+Last changed: _2023/10/01_
+
+![Picture](../documents/Images/vfpxpoweredby_alternative.gif)
