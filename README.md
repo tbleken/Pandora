@@ -10,6 +10,7 @@
 |E|[-na-](documents/panrc.md)  || [Run the code where your cursor is](documents/panrc.md)|
 |C|[-blank-](documents/panorg.md)  || [Opens default files listed in active .pan file](documents/panorg.md)|
 |E|[-blank-](documents/panmnu.md)  || [Menu of relevant Pandora options](documents/panmnu.md)|
+| |[. (dot)](documents/panta.md)|[, (comma)](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
 |C |[0 (zero)](documents/panorg.md) || [Opens active .pan file for editing ](documents/panorg.md)|
 |F|[DD](documents/pandd.md)     || [DoDefault() syntax builder](documents/pandd.md)|
 | |[Description](documents/pandesc.md)|[Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
@@ -29,7 +30,7 @@
 | |[Pan](documents/panext.md) |[!](documents/panext.md)| [Create and run your own `Pandora` extensions](documents/panext.md)|
 | |[Paned](documents/panext.md#paned) |[!!](documents/panext.md#paned)| [Edit your own `Pandora` extensions](documents/panext.md#paned)|
 | |[Project](documents/panorg.md#proj) |[Pr, Proj](documents/panorg.md#proj)| [List of projects in active .pan file ](documents/panorg.md#proj)|
-| |[Ta](documents/panta.md)|[. (dot)](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
+| |[Test](documents/panta.md)|[ta](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
 | |[Thor](documents/panth.md) |[Th, Tools](documents/panth.md)| [Picklist of registered **Thor** tools](documents/panth.md)|
 | |Version |Ver| Shows `Pandora` version number|
 

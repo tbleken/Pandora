@@ -8,7 +8,8 @@ This file is also a perfect place to store your frequently used `Pandora` "comma
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
-| . (dot)                  | Opens `Pandora.prg`  |
+| Test                  | Opens `Pandora.prg`  |
+| Ta                  | Same as above  |
+| . (dot)                  | Same as above  |
 | , (comma)                | Same as above                              |
 
-#### Note: This feature only works in the Command Window  

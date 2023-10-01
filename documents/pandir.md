@@ -44,6 +44,8 @@ Sample:
 
 ![dirc](Images/pandirc.png)
 
+Notice that the content of the files can be seen as a tooltip for all relevant files. For these files the `text` field is green.
+
 <a id="dirr">  
 
 ### Option 2: Dirr </a>
@@ -71,6 +73,7 @@ Sample:
 | dircr      | Same as above |  
 
 ![dircr](Images/pandircr.png)
+Notice that the content of the files can be seen as a tooltip for all relevant files. For these files the `text` field is green.
 
 
 
