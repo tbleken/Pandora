@@ -1,7 +1,7 @@
 [![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
 
 
-## Open SuperBrowse as a field picker for SQL statements. 
+## Open SuperBrowse as a field picker for SQL statements.  
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
