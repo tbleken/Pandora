@@ -21,6 +21,7 @@
 | |[Dirr](documents/pandir.md#dirr) || [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
 |C |[Dirr](documents/pandir.md#dirr) |[*:r ](documents/pandir.md#dirr)| [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
 |E|[Eval](documents/paneval.md)|[=](documents/paneval.md)| [Insert returned value from a function](documents/paneval.md)|
+||[Fp](documents/panfp.md)|| [Field picker to create SQL statements](documents/panfp.md)|
 |C |Help ||This document|
 | |[Hotkeys](documents/panhk.md) |[Hk](documents/panhk.md) |[List of all assigned hot keys](documents/panhk.md)|
 |E|[Inc](documents/paninc.md)|| [Insert #Include statement](documents/paninc.md)|

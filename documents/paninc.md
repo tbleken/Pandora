@@ -6,14 +6,13 @@ This keyword is a helper to include a header file, .h, into your program. Type `
 
 | You type:  | After pressing `F8`                                                                  |
 |:----------|:--------------------------------------------------------------------------------------|
+| inc | Picklist of all .h files in your path |
 | inc w | Picklist of files matching \*w\*.h in your path |
 | #inc w | Same as above, \# is optional |
-| inc\<space\> | Picklist of all .h files in your path |
 
-Note the space character in the last sample, it's *not* optional.
 
 ![inc](Images/paninc.png)
 
-The result after pressing **Enter** is `#include yourfile.h`
+The result after pressing `Enter` is `#include yourfile.h`
 
 
