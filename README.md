@@ -20,6 +20,7 @@
 |C |[Dirc](documents/pandir.md#dirc) |[*:c](documents/pandir.md#dirc)| [List all VFP files in the path with the  contents](documents/pandir.md#dirc)||
 | |[Dirr](documents/pandir.md#dirr) || [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
 |C |[Dirr](documents/pandir.md#dirr) |[*:r ](documents/pandir.md#dirr)| [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
+||[Ed](documents/paned.md)|| [An easy way to open most files](documents/paned.md)|
 |E|[Eval](documents/paneval.md)|[=](documents/paneval.md)| [Insert returned value from a function](documents/paneval.md)|
 ||[Fp](documents/panfp.md)|| [Field picker to create SQL statements](documents/panfp.md)|
 |C |Help ||This document|
