@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.01 - 20231001'
-	.AvailableVersion = 'Pandora-1.01-08674-20231001'
+	.VersionNumber    = '1.00 - 20231002'
+	.AvailableVersion = 'Pandora-1.00-08675-20231002'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,9 +13,9 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
-### 2023-09=20, Version 1.00 ###
+### 2023-10-2, Version 1.00 ###
 
-#### Off to the races!
+#### First release of `Pandora` to go public!
 
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
 

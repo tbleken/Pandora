@@ -10,7 +10,7 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.00.01'
+#Define ccVersion '1.00'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
@@ -174,7 +174,8 @@ Function ProcessText
           Else
             Wait Window [Current line number is outside the Description range (1 to 10)!]
           Endif
-      Endcase
+      EndCase
+      
     Case m.lnWindowType = 0 And Inlist(m.lcCommand, [pr], [proj], [project])
       ListProjects()
     Case Inlist(m.lcCommand, [menu]) Or (m.lnWindowType > 0 And m.lcCommand = [ed] And Empty(m.lcParam1 )) Or (m.lcCommand == [?] And Empty(m.lcParam1))
@@ -516,7 +517,7 @@ Procedure ListFiles
       Case Lower(Justext(m.lcText)) = [pan]
         Modify File (m.lcText)
       Case !Empty(m.lcText)
-        RunEd(m.lcText)
+        RunEd(FullPath(m.lcText))
     Endcase
   Else
     m.loContextMenu = Execscript (_Screen.cThorDispatcher, [class= contextmenu])
@@ -847,11 +848,14 @@ Function RunEd(tcPar)
   m.lcFolder = [classes\]
   m.lnLineNo = Int(Val(Strextract(m.lcParam1, [:], [])))
   Do Case
+    Case Empty(JustExt(m.lcParam1)) and Right(m.lcParam1,1)#')' and !InList(Left(m.lcParam1,4),'http','mail')
+      m.lcExt = 'prg'
+      m.lcParam1 = ForceExt(m.lcParam1,m.lcExt)
     Case [.scx] $ m.lcParam1
       m.lcExt = [scx]
     Case [.vcx] $ m.lcParam1
       m.lcExt = [vcx]
-    Case [.prg] $ m.lcParam1
+    Case [.prg] $ m.lcParam1 
       m.lcExt = [prg]
     Case Occurs([.], m.lcParam1) = 1
       m.lcExt = Justext(m.lcParam1)
@@ -987,7 +991,7 @@ Function clipIsText
 Function FindFile
   Lparameters tcFile, tcFilter
   If Empty(m.tcFilter)
-    m.tcFilter = ['dbf','vcx','scx','prg','txt']
+    m.tcFilter = ['dbf','vcx','scx','prg','txt','pan']
   Endif
   m.lcPath = Justpath(m.tcFile)
   m.lcFile = []
@@ -1088,9 +1092,9 @@ Procedure BrowseAllTools
   If !Empty(m.lcProg)
     Execscript(_Screen.cThorDispatcher, m.lcProg)
   Endif
-  If !_Screen.lPanComment
-    CutCurrentLine()
-  Endif
+*!*    If !_Screen.lPanComment
+*!*      CutCurrentLine()
+*!*    Endif
 Endproc
 ****************************************************************
 Function GetDataFromGrid
@@ -1364,7 +1368,7 @@ Procedure AddLinesAndText
 
   m.lnMemo = Set([Memowidth])
   Set Memowidth To 8192
-  Scan For Inlist(Lower(Justext(Filename)), [prg], [txt], [h])
+  Scan For Inlist(Lower(Justext(Filename)), [prg], [txt], [h],'pan')
     Replace Text With Filetostr(Alltrim(Filename))
     Replace LineS With Memlines(Text)
   Endscan
@@ -1403,6 +1407,8 @@ Function CreatePandoraCursor
   Lparameters tnWindowType
 
   Local lcProg, lcWindow, lnSelect
+  Local lcAsk, lcDesc, lcShort, lcTrigger
+
 
   m.tnWindowType = Evl(m.tnWindowType, 0)
   Local laPandoraChoices[1], lcPandoraOptions, lnLines, lnX
@@ -1410,30 +1416,31 @@ Function CreatePandoraCursor
   Text To m.lcPandoraOptions Noshow Textmerge Pretext 7
       Dir    |    | Picklist of all VFP files in the path              | cef |    |
       *      |    | Picklist of all VFP files in the path              | c |    |
-      Dirr  |    | Picklist of VFP files with reccount for all tables | cef |    |
+      Dirr  |    | Picklist of VFP files with reccount for all tables  | cef |    |
       *:r    |    | Picklist of VFP files with reccount for all tables | c  |    |
-      Dirc  |    | Picklist of VFP files with the contents            | cef |    |
+      Dirc  |    | Picklist of VFP files with the contents             | cef |    |
       *:c    |    | Picklist of VFP files fields with the contents     | c  |    |
-      Desc   |    | Picklist of prg files with a description           | c  |    |
+      Desc   |    | Picklist of prg files with a description           | c   |    |
       Desc   |    | Adds "* Description *" template to the active file | ef  |    |
-      <blank>|    | Opens default files listed in active .pan file      | c  |    |
+      <blank>|    | Opens default files listed in active .pan file     |  c  |    |
       <blank>|    | Menu                                               | ef  |    |
-      0      |    | Opens active .pan file for editing                  | c  |    |
+      0      |    | Opens active .pan file for editing                 | c   |    |
       Menu   | ?  | Menu                                               | ef  |    |
-      Project|pr  | Picklist of projects in active .pan file           | c  |    |
+      Project|pr  | Picklist of projects in active .pan file           | c   |    |
       Help   |    | Opens Pandora page in the default Browser          | cef |    |
       Inc    |    | Insert #Include statement from Picklist of .h files| ef  |    |
-      Ins    | +  | Inserts contents from prg                          | ef  |    |
-      Eval   | =  | Inserts return value from function                 | ef  |    |
-      No     |    | NewObject syntax builder                           | cef |    |
-      DD     |    | DoDefault() syntax builder                         | f  |    |
-      Pan    | !  | Run or create custom made Pandora extensions       | cef | !  |
-      Paned  | !! | Edit custom made Pandora extensions                | cef | !! |
-      Ta     | .  | Test area "pandora.prg"                            | cef ||
-      Thor   | th | Picklist of registered Thor tools                  | cef | th |
-      Hotkeys| hk | Picklist of all assigned hot keys                  | cef | hk |
+      Ins    | +  | Inserts contents from prg                          | ef  | Name of file to include:   |
+      Eval   | =  | Inserts return value from function                 | ef  | Function name to evaluate: |
+      No     |    | NewObject syntax builder                           | cef | Class name:   |
+      DD     |    | DoDefault() syntax builder                         | f   |    |
+      Pan    | !  | Run or create custom made Pandora extensions       | cef |    |
+      Paned  | !! | Edit custom made Pandora extensions                | cef |    |
+      Ta     | .  | Test area "pandora.prg"                            | cef |      |
+      Thor   | th | Picklist of registered Thor tools                  | cef |      |
+      Hotkeys| hk | Picklist of all assigned hot keys                  | cef |      |
+      Ed     |    | Easy way to open most files                        | cef | Filename or URL: |
   Endtext
-  Create Cursor curPandora (Trigger c(10), Short c(5), Descript c(50),  Window c(2))
+  Create Cursor curPandora (Trigger c(10), Short c(5), Descript c(50),  Window c(2), ask c(25))
   m.lnLines = Alines(laPandoraChoices, m.lcPandoraOptions)
   For m.lnX = 1 To m.lnLines
     m.lcWindow = Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 4, [|]))
@@ -1444,23 +1451,31 @@ Function CreatePandoraCursor
       Otherwise
         Loop
     Endcase
-    Insert Into curPandora (Trigger, Short, Descript) Values (;
-        Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 1, [|])),;
-        Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 2, [|])),;
-        Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 3, [|]));
-        )
-  Endfor
+    m.lcTrigger = Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 1, [|]))
+    m.lcShort = Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 2, [|]))
+    m.lcDesc = Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 3, [|]))
+    m.lcAsk = Alltrim(Getwordnum( m.laPandoraChoices(m.lnX), 5, [|]))
+    Insert Into curPandora (Trigger, Short, Descript, ask) Values (m.lcTrigger, m.lcShort, m.lcDesc, m.lcAsk)
+  EndFor
+  Select Trigger, Short, Descript, Ask from curPandora into cursor curPandora readwrite
   Index On Lower(Descript) Tag Descript
   Index On Lower(Short) Tag Short
   Index On Trigger Tag Trigger
   m.lcProg = GetDataFromGrid([Pandora "commands" aaa], [trigger], 1)
+  lcAsk = ''
+  If !Empty(m.lcProg)
+    Select ask from curPandora where Alltrim(m.lcProg) = Alltrim(trigger) into cursor CurPandora
+    m.lcAsk = ask
+  Endif
   Use
   Select (m.lnSelect)
   If !Empty(m.lcProg)
     Do Case
       Case m.lcProg = [<blank>]
         m.lcProg = [ed]
-      Case Inlist(Lower(m.lcProg), [pan], [paned])
+      Case !Empty(m.lcAsk)
+        m.lcProg = m.lcProg + [ ] + Inputbox(m.lcAsk , [Value is required!])
+      Case Inlist(Lower(m.lcProg), [pan], [paned],'eval')
         m.lcProg = m.lcProg + [ ] + Inputbox([Name of file:], [Empty gives picklist])
     Endcase
     If _Screen.lPanComment
