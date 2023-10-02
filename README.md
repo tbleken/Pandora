@@ -1,6 +1,12 @@
 
 [![How Pandora works](documents/Images/pandora2.png)](documents/panhow.md)
 
+Version 1.00 Released 2023-10-02
+
+[What's new in this release](Change%20Log.md)
+
+*** 
+
 Pandora provides a wide range of programmers' tools, accessible either from a code window or the command window.  These tools are accessed by entering a few characters ("commands") and then pressing the dedicated hotkey, e.g. `F8`. In this documentation `F8` is consistently used as Hotkey for `Pandora`.  
  
 Some of these programmers' tools are unique to `Pandora`, others provide access to existing Thor tools.  

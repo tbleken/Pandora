@@ -1,6 +1,6 @@
-### 2023-09=20, Version 1.00 ###
+### 2023-10-2, Version 1.00 ###
 
-#### Off to the races!
+#### First release of `Pandora` to go public!
 
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
 
