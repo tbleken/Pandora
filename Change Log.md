@@ -1,13 +1,14 @@
 ### 2023-10-5, Version 1.01 ###
 
 Changed the syntax for the Dir commands, and in which window the different syntax versions can be used. 
-Most important is the new DirX command and the shorter version,
-\*\* and \*\*:. The latter and \*: can now also be used in all of VFP's editors.
-A side effect is that some earlier command versions don't work anymore.
+Most important is the new DirX command and the command's shorter versions,
+`**` and `**:`. The latter, and `\*:` which is short for `Dir`,  can now also be used in all of VFP's editors.  
 
-Document updated accordingly.
+The addition of `DirX` and the shorter versions, means fewer commands to remember. A side effect is that some earlier `Dir` options can't be called anymore. Instead all the options are now combined into the new `DirX` command, and its shorter versions.
 
-Corrected the documentation for Ins.
+Documentation updated accordingly.
+
+Corrected the documentation for Pandora's command `Ins`.
 
 ### 2023-10-2, Version 1.00 ###
 
