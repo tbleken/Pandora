@@ -1,7 +1,7 @@
 
 [![How Pandora works](documents/Images/pandora2.png)](documents/panhow.md)
 
-Version 1.00 Released 2023-10-02
+Version 1.01 Released 2023-10-05
 
 [What's new in this release](Change%20Log.md)
 
@@ -16,13 +16,12 @@ This is a list of all the "commands" that `Pandora` supports, along with a short
 
 These "commands" work in **all** of VFP's code editors, including the command window: 
 
-|Command |Short form| Result after pressing `Pandora` hotkey, e.g. `F8`|
+|Command |Short version| Result after pressing `Pandora` hotkey, e.g. `F8`|
 |:--|:--  |:-------------|
 |[. (dot)](documents/panta.md)|[, (comma)](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
 |[Description](documents/pandesc.md)|[Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
-|[Dir](documents/pandir.md)  || [List all VFP files in the path](documents/pandir.md)|
-|[Dirc](documents/pandir.md#dirc) || [List all VFP files in the path with the  contents](documents/pandir.md#dirc)||
-|[Dirr](documents/pandir.md#dirr) || [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
+|[Dir](documents/pandir.md)  |\*:| [List all VFP files in the path](documents/pandir.md)|
+|[DirX](documents/pandir.md#dirc)  |[\*\*:](documents/pandir.md#dirc)| [Same as above, more info in the table](documents/pandir.md#dirc)|
 |[Ed](documents/paned.md)|| [An easy way to open most files](documents/paned.md)|
 |[Fp](documents/panfp.md)|| [Field picker to create SQL statements](documents/panfp.md)|
 |[Hotkeys](documents/panhk.md) |[Hk](documents/panhk.md) |[List of all assigned hot keys](documents/panhk.md)|
@@ -34,6 +33,7 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 |Version |Ver| Shows `Pandora` version number|
 
 
+
 In addition to the "commands" listed above, these work **only** in the **Command Window:**
 
 |Command |Short| Result after pressing `Pandora` hotkey, e.g. `F8`|
@@ -41,23 +41,23 @@ In addition to the "commands" listed above, these work **only** in the **Command
 |[-blank-](documents/panorg.md)  || [Opens default files listed in active .pan file](documents/panorg.md)|
 |[0 (zero)](documents/panorg.md) || [Opens active .pan file for editing ](documents/panorg.md)|
 |[Dir](documents/pandir.md)  |[*](documents/pandir.md)| [List all VFP files in the path](documents/pandir.md)|
-|[Dirc](documents/pandir.md#dirc) |[*:c](documents/pandir.md#dirc)| [List all VFP files in the path with the  contents](documents/pandir.md#dirc)||
-|[Dirr](documents/pandir.md#dirr) |[*:r ](documents/pandir.md#dirr)| [List  all VFP files in the path including the record count for all "tables"](documents/pandir.md#dirr)|
+|[DirX](documents/pandir.md#dirc)  |[**](documents/pandir.md#dirc)| [Same as above, more info in the table](documents/pandir.md#dirc)|
 |Help ||This document|
 
-Likewise, these "commands" **only** work in VFP's code editors (**Modify Command, Form or Class designer**).
+
+Likewise, these "commands" **only** work in VFP's code editors (**Modify Command, Form or Class designer**):
 
 |Command |Short| Result after pressing `Pandora` hotkey, e.g. `F8`|
 |:--|:--  |:-------------|
 |[-na-](documents/panrc.md)  || [Run the code where your cursor is](documents/panrc.md)|
 |[-blank-](documents/panmnu.md)  || [Menu of relevant Pandora options](documents/panmnu.md)|
-|[DD <sub>Note 1</sub>](documents/pandd.md)     || [DoDefault() syntax builder](documents/pandd.md)|
+|[DD <sub>Note 2</sub>](documents/pandd.md)     || [DoDefault() syntax builder](documents/pandd.md)|
 |[Eval](documents/paneval.md)|[=](documents/paneval.md)| [Insert returned value from a function](documents/paneval.md)|
 |[Inc](documents/paninc.md)|| [Insert #Include statement](documents/paninc.md)|
 |[Insert](documents/panins.md) |[+, Ins](documents/panins.md)| [Insert contents from a prg](documents/panins.md)|
 |[Menu](documents/panmnu.md)  |[?](documents/panmnu.md)| [Menu of relevant `Pandora` options](documents/panmnu.md)|
 
-**Note 1:** `DD` only works in VFP's **Form or Class Designer**, and **not** in *Modify Command*.
+**Note 2:** `DD` only works in VFP's **Form or Class Designer**, and **not** in *Modify Command*.
 
 **-na-** means special handling, see [documentation](documents/panrc.md) for details.   
 

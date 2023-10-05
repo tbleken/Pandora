@@ -14,6 +14,7 @@
 | ed test.txt | Opens file test.txt for editing, or creates it if not found |
 | ed https:\/\/github.com/tbleken/Pandora| The URL is opened in default browser|
 | ed D:\Doc\MyDocs\MyDocument.docx| The document is opened in the default application |
+| ed C:\Windows\Notepad.exe| Notepad opens |
 
 Note that if no extension is given, prg is expected
 

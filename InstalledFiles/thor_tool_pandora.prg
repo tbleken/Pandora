@@ -10,13 +10,14 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.00'
+#Define ccVersion '1.01'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
 #Define ccDescriptionMask2 '*'
 #Define ccCursorfiles 'curFiles'
 #Define ccCR Chr(13)
+#Define ccMaxDescriptLine 15
 #Define ccWantGrid .T.
 #Define ccVFPFilesToList [dbf], [scx], [vcx], [prg], [h], [dbc], [frx], [lbx], [mnx], [txt], [pan]
 #Define ccVFPTablesExtended [dbf], [dbc], [frx], [lbx], [mnx], [pjx], [scx], [vcx]
@@ -34,6 +35,7 @@ If Pcount() = 1              ;
 
     * Required
     .Prompt       = [Pandora] && used in menus
+    .AppID        = [Pandora] 
 
     * Optional
     Text To .Description Noshow && a description for the tool
@@ -48,7 +50,7 @@ A tool with many features
     .Sort       = 0 && the sort order for all items from the same Category
 
     * For public tools, such as PEM Editor, etc.
-    .Version     = [1.00] && e.g., 'Version 7, May 18, 2011'
+    .Version     = [1.01] && e.g., 'Version 7, May 18, 2011'
     .Author        = [TB]
     .Link          = ccPandoraHelp && link to a page for this tool
     .VideoLink     = [] && link to a video for this tool
@@ -97,7 +99,7 @@ Endproc
 Function ProcessText
   Lparameters tcLine
 
-  Local lcAlias, lcCommand, lcFormFileName, lcOption, lcParam1, lcReturn, lcText, lcdata, lnWindowType
+  Local lcAlias, lcCommand, lcFormFileName, lcParam1, lcReturn, lcText, lcdata, lnWindowType
   Local loEditorWin
 
   If !Pemstatus(_Screen, [lTest], 5)
@@ -108,37 +110,46 @@ Function ProcessText
   m.loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
 
   m.lnWindowType = m.loEditorWin.FindWindow()
+  lcLine = Getwordnum(m.tcLine, 1)
+
   If m.lnWindowType = 0 && Command window
     Do Case
       Case Left(m.tcLine, 2) = [//] && Command window
         m.tcLine = [dir ] + Substr(m.tcLine, 3)
       Case Left(m.tcLine, 1) = [/] && Command window
         m.tcLine = [dir ] + Substr(m.tcLine, 2)
+      Case Left(m.tcLine, 3) = [**:]
+        m.tcLine = [dirall ] + Substr(m.tcLine, 4)
+      Case Left(m.tcLine, 2) = [*:]
+        m.tcLine = [dir ] + Substr(m.tcLine, 3)
+      Case Left(m.tcLine, 2) = [**]
+        m.tcLine = [dirall ] + Substr(m.tcLine, 3)
       Case Left(m.tcLine, 1) = [*]
         m.tcLine = [dir ] + Substr(m.tcLine, 2)
-    Endcase
+    EndCase
     If m.tcLine = [dir] And Left(Getwordnum(m.tcLine, 2), 1) = [:]
       m.tcLine = Strtran(m.tcLine, [dir ], [dir], 1, 1)
     Endif
   Else
-    If Left(m.tcLine, 1) = [*]
+    If Left(m.tcLine, 1) = [*] and !':'$GetWordNum(m.tcLine,1)
       _Screen.lPanComment = .T.
-    Endif
-  Endif
-  Do Case
-    Case Getwordnum(m.tcLine, 1) = [dircr]
-      m.tcLine = Stuff(m.tcLine, 0, 5, [dir:cr])
-    Case Getwordnum(m.tcLine, 1) = [dirrc]
-      m.tcLine = Stuff(m.tcLine, 0, 5, [dir:rc])
-    Case Getwordnum(m.tcLine, 1) = [dirr]
-      m.tcLine = Stuff(m.tcLine, 0, 4, [dir:r])
-    Case Getwordnum(m.tcLine, 1) = [dirc]
-      m.tcLine = Stuff(m.tcLine, 0, 4, [dir:c])
-  Endcase
-
+    Else
+      Do case
+        Case m.lcLine = '*:'
+          m.tcLine = [dir ] + Substr(m.tcLine, 3)
+        Case m.lcLine = '**:'
+          m.tcLine = [dirall ] + Substr(m.tcLine, 4)
+  
+      Endcase
+    EndIf
+    
+  EndIf
+  m.lcLine = GetWordNum(m.tcLine,1)
+  If InList(m.lcLine , 'dirall','dirx')
+     m.tcLine = Stuff(m.tcLine, 0, Len(m.lcLine), [dir:a])   
+  EndIf 
   m.lcCommand = Lower(Getwordnum(m.tcLine, 1))
   m.lcParam1 = Ltrim(Strextract(m.tcLine, m.lcCommand, [], 1, 1))
-  m.lcOption = Getwordnum(Strextract(m.tcLine, [:], []), 1)
   If At([&] + [&], m.lcParam1) > 0
     m.lcParam1 = Trim(Strextract(m.lcParam1, [], [&] + [&]))
   Endif
@@ -160,7 +171,7 @@ Function ProcessText
         Case m.lnWindowType = 0 && Command window
           ListDescript(m.lcParam1, m.lcCommand )
         Case Inlist(m.lnWindowType, 1, 2) && Program or text file
-          If m.loEditorWin.GetLineNumber() < 10
+          If m.loEditorWin.GetLineNumber() < ccMaxDescriptLine
             If Empty(m.lcParam1)
               m.lcText = ccDescriptionMask1 + Space(3) + ccDescriptionMask2 + ccCR
             Else
@@ -172,7 +183,7 @@ Function ProcessText
               m.loEditorWin.SetInsertionPoint(m.loEditorWin.GetSelStart() - 4)
             Endif
           Else
-            Wait Window [Current line number is outside the Description range (1 to 10)!]
+            Wait Window Textmerge([Current line number is outside the Description range (1 to <<ccMaxDescriptLine>>)!])
           Endif
       EndCase
       
@@ -208,7 +219,7 @@ Function ProcessText
       RunEd([Pandora.prg])
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And Empty(m.lcParam1) And m.lcCommand = [0] && and m.lnWindowType = 0
       CutCurrentLine()
-      Modify File (_Screen.cPandorafile)
+      Modify Command (_Screen.cPandorafile) nowait
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And m.lcCommand = [0] And m.lcParam1 = [?]
       ReportPandoraFile()
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And m.lcCommand = [0] And !Empty(m.lcParam1)
@@ -226,7 +237,7 @@ Function ProcessText
       ReturnUnknownCommand(1)
     Case m.lcCommand = [ed] And m.lcParam1 = Transform(Val(m.lcParam1 )) && And m.lnWindowType = 0
       If m.lcParam1 = [0]
-        Modify File (_Screen.cPandorafile)
+        Modify Command (_Screen.cPandorafile) nowait
       Else
         getlinestoprocess(Val(m.lcParam1 ))
       Endif
@@ -390,7 +401,7 @@ Procedure ListDescript
       Select * From (ccCursorfiles) Where m.lcText $ Lower(Filename) Or m.lcText $ Lower(Descript) Order By uDescript Into Cursor (ccCursorfiles) Readwrite
     Endfor
   Endif
-  If ccWantGrid And File([pg.vcx])
+  If ccWantGrid 
     Go Top
     m.lcSelected = GetDataFromGrid([Prg files with description], [Filename], 1)
     If !Empty(m.lcSelected)
@@ -437,9 +448,13 @@ Procedure ListFiles
   Local laDummy[1], lcOption, lcText, lcWord, llRecords, lnFiles, lnX, loContextMenu
   Local lcFilename
   Local lnMemo
-
-
-
+  If _Screen.lTest
+    Text to lcShow noshow textmerge
+      tcFilter : <<m.tcFilter >>
+      tcPrefix : <<m.tcPrefix >>
+    EndText
+    messagebox( m.lcShow)
+  Endif
   m.lcOption = Getwordnum(Strextract(m.tcPrefix, [:], []), 1)
   m.tcFilter = Evl(m.tcFilter, [*])
   m.tcFilter = Lower(m.tcFilter)
@@ -477,7 +492,7 @@ Procedure ListFiles
   Endif
   Select f1 As Filename, Alltrim(Fname) As FullName, Filedate, FileSize From (ccCursorfiles) Into Cursor (ccCursorfiles) Readwrite Order By 1
   m.llRecords = .F.
-  If [r] $ m.lcOption
+  If [a] $ m.lcOption
     Select Count(*) From (ccCursorfiles) Where Inlist(Lower(Justext(Filename)), ccVFPTablesExtended) Into Array laDummy
   Else
     Select Count(*) From (ccCursorfiles) Where Inlist(Lower(Justext(Filename)), [dbf]) Into Array laDummy
@@ -487,7 +502,7 @@ Procedure ListFiles
     Alter Table (ccCursorfiles) Add Column RecordS i
     Alter Table (ccCursorfiles) Add Column MemoSize i
   Endif
-  If [r] $ m.lcOption
+  If [a] $ m.lcOption
     Set Filter To Inlist(Lower(Justext(Filename)), ccVFPTablesExtended)
   Else
     Set Filter To Inlist(Lower(Justext(Filename)), [dbf])
@@ -497,10 +512,20 @@ Procedure ListFiles
     Replace MemoSize with GetMemoSize(FullPath(Fullname))
   Endscan
   Set Filter To
-  If [c] $ m.lcOption
+  If [a] $ m.lcOption
     Alter Table (ccCursorfiles) Add Column LineS i
     Alter Table (ccCursorfiles) Add Column Text m
     AddLinesAndText()
+    Alter Table (ccCursorfiles) Add Column Descript c(100)
+        Scan
+        m.lcFile = Alltrim(Fullname)
+        m.lcDescript = GetDescript(m.lcFile )
+        If !Empty( m.lcDescript )
+          Replace Descript With m.lcDescript
+        Endif
+      EndScan
+      Index on Upper(descript) tag descript
+      Go Top
   Endif
   If !Empty(Field([records]))
     Index On RecordS Tag RecordS
@@ -514,8 +539,10 @@ Procedure ListFiles
   If ccWantGrid
     m.lcText = GetDataFromGrid([Select a file:], [fullname], 0)
     Do Case
+      Case [x] $ m.lcOption
+        ConfirmDelete(m.lcText)
       Case Lower(Justext(m.lcText)) = [pan]
-        Modify File (m.lcText)
+        Modify Command (m.lcText) nowait
       Case !Empty(m.lcText)
         RunEd(FullPath(m.lcText))
     Endcase
@@ -550,6 +577,27 @@ Procedure refreshCommandWindow
   Endif
 Endproc
 
+**********************************************************************
+Function ConfirmDelete
+Lparameters tcFile
+  If Lower(JustExt(m.tcFile)) = 'prg' 
+    lcReply = 'PANX'
+    If Lower( InputBox('Confirm deletion by typing ' + m.lcReply +':','Delete '+m.tcFile,'') ) = Lower(m.lcReply)
+      Dimension laExtensions(3)
+      m.laExtensions(1) = 'prg'
+      m.laExtensions(2) = 'bak'
+      m.laExtensions(3) = 'fxp'
+      For lnX = 1 to 3
+        Try
+          Delete File (ForceExt(m.tcFile,m.laExtensions(m.lnX)))
+        Catch
+        Endtry
+      EndFor
+    Else 
+      messagebox( "No deletion done!",64,m.tcFile)
+    Endif
+  Endif
+Endfunc
 **********************************************************************
 Function GetRecordsInDBF
   Lparameters tcFileName
@@ -795,7 +843,7 @@ Function CheckOrCreatePandoraFile
   Else
     If Messagebox( [Specified file "] + _Screen.cPandorafile + [" doesn't exist, create empty file?], 4, [File not found!]) = 6
       Strtofile([], _Screen.cPandorafile)
-      Modify File (_Screen.cPandorafile)
+      Modify Command (_Screen.cPandorafile) nowait
     Endif
     Return .F.
   Endif
@@ -871,7 +919,7 @@ Function RunEd(tcPar)
     Case Inlist(Lower(Strextract(m.lcParam1, [], [:], 1, 4)), [http:], [https:])
       shellX(m.lcParam1)
     Case m.lcExt = [pan]
-      Modify File (m.tcPar)
+      Modify Command (m.tcPar) nowait
     Case m.lcExt = [vcx] Or m.lcExt = [scx]
       If [:] $ m.lcParam1
         m.lcParameters = Strextract(m.lcParam1, m.lcExt + [.], [:])
@@ -1178,7 +1226,7 @@ Procedure ListAllCustomTools
             m.lcPath = []
         Endcase
         _Screen.lPanComment = .F.
-        Modify Command (Forcepath(m.lcProg, m.lcPath))
+        Modify Command (Forcepath(m.lcProg, m.lcPath)) nowait
       Endif
     Endif
   Endif
@@ -1193,7 +1241,7 @@ Procedure EditCustomTool
   m.lcProgFile = Forceext([pan_] + m.lcProg, [prg])
   If !Empty(m.lcProg)
     If File(m.lcProgFile)
-      Modify Command (m.lcProgFile)
+      Modify Command (m.lcProgFile) nowait
     Else
       Messagebox( [File ] + m.lcProgFile + [ is not found!], 0 + 48, [Nothing to do])
     Endif
@@ -1218,7 +1266,7 @@ Procedure EditCustomTool
       Use
       Select (m.lnSelect)
       If !Empty(m.lcProg)
-        Modify Command (m.lcProg)
+        Modify Command (m.lcProg) nowait
       Endif
       If !_Screen.lPanComment
         CutCurrentLine()
@@ -1265,7 +1313,7 @@ Function GetDescript
 
   m.lnHandle = Fopen(m.tcFile )
   m.lcDescript = []
-  For m.lnX1 = 1 To 10
+  For m.lnX1 = 1 To ccMaxDescriptLine 
     m.lcContents = Fgets(m.lnHandle)
     If Occurs(ccDescriptionMask1, m.lcContents) > 0
       m.lcDescript = Alltrim(Strextract(m.lcContents, ccDescriptionMask1, ccDescriptionMask2 ))
@@ -1369,8 +1417,11 @@ Procedure AddLinesAndText
   m.lnMemo = Set([Memowidth])
   Set Memowidth To 8192
   Scan For Inlist(Lower(Justext(Filename)), [prg], [txt], [h],'pan')
-    Replace Text With Filetostr(Alltrim(Filename))
-    Replace LineS With Memlines(Text)
+    try
+      Replace Text With Filetostr(Alltrim(Filename))
+      Replace LineS With Memlines(Text)
+    catch
+    Endtry
   Endscan
   Set Memowidth To m.lnMemo
   Index On LineS Tag LineS
@@ -1414,12 +1465,10 @@ Function CreatePandoraCursor
   Local laPandoraChoices[1], lcPandoraOptions, lnLines, lnX
   m.lnSelect = Select()
   Text To m.lcPandoraOptions Noshow Textmerge Pretext 7
-      Dir    |    | Picklist of all VFP files in the path              | cef |    |
-      *      |    | Picklist of all VFP files in the path              | c |    |
-      Dirr  |    | Picklist of VFP files with reccount for all tables  | cef |    |
-      *:r    |    | Picklist of VFP files with reccount for all tables | c  |    |
-      Dirc  |    | Picklist of VFP files with the contents             | cef |    |
-      *:c    |    | Picklist of VFP files fields with the contents     | c  |    |
+      Dir    | *: | Picklist of all VFP files in the path              | cef |    |
+      *      |    | Picklist of all VFP files in the path              | c   |    |
+      DirX   | **:| Picklist of VFP files with extended information    | cef |    |
+      **     |    | Picklist of VFP files with extended information    |  c  |    |
       Desc   |    | Picklist of prg files with a description           | c   |    |
       Desc   |    | Adds "* Description *" template to the active file | ef  |    |
       <blank>|    | Opens default files listed in active .pan file     |  c  |    |
@@ -1435,9 +1484,9 @@ Function CreatePandoraCursor
       DD     |    | DoDefault() syntax builder                         | f   |    |
       Pan    | !  | Run or create custom made Pandora extensions       | cef |    |
       Paned  | !! | Edit custom made Pandora extensions                | cef |    |
-      Ta     | .  | Test area "pandora.prg"                            | cef |      |
-      Thor   | th | Picklist of registered Thor tools                  | cef |      |
-      Hotkeys| hk | Picklist of all assigned hot keys                  | cef |      |
+      Ta     | .  | Test area "pandora.prg"                            | cef |    |
+      Thor   | th | Picklist of registered Thor tools                  | cef |    |
+      Hotkeys| hk | Picklist of all assigned hot keys                  | cef |    |
       Ed     |    | Easy way to open most files                        | cef | Filename or URL: |
   Endtext
   Create Cursor curPandora (Trigger c(10), Short c(5), Descript c(50),  Window c(2), ask c(25))

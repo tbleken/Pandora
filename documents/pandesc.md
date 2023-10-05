@@ -15,7 +15,7 @@ If your program files contains a description in one of the ten first lines, **Pa
 |-------|:----------|:----------------------|
 | C | `Desc`           | You get a list of all prgs in your path which have a description|
 | C | `Desc aaa` | List of files where the descriptions contains `aaa`|
-| E | `Desc` | A `* Description *` template is added in the current line (line 10 or less)|
+| E | `Desc` | A `* Description *` template is added in the current line (line 15 or less)|
 
 
 `C`: Command Window  
