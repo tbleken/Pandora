@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
+[![Pandora](Images/pandora2.png)](../README.md)
 
 ## NO (NewObject builder)</a>  
 `NO` is short for NewObject, and is a helper to create the correct syntax. Also the corresponding Local declaration is added where it's appropriate.  
