@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
+[![Pandora](Images/pandora2.png)](../README.md)
 
 ## How does `Pandora` work? 
 #### A more detailed overview and an explanation of some of `Pandora` several features. 

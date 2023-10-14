@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
+[![Pandora](Images/pandora2.png)](../README.md)
 
 ## Create your own *Pandora* extensions
 
@@ -18,10 +18,10 @@ Type the same as mentioned above, `!xxx`, and press `F8`. **Pandora** will locat
 
 #### To see a list of all your **Pandora** extensions:
 
-| You type:                |        Result after pressing `F8`                                |
-|:-------------------------|:----------------------------------------------------------|
-| ! | Lists all your **Pandora** extensions|
-|pan| Same as above|   
+| Command| Short                |        Result after pressing `F8`                                |
+|:---|:----------------------|:----------------------------------------------------------|
+| pan | ! | Lists all your **Pandora** extensions|
+|pan xxx| List of all **Pandora** extensions, name contains `xxx` |   
 
 Select the one you want, and press **Enter** to run it.
 
@@ -31,15 +31,14 @@ Select the one you want, and press **Enter** to run it.
 
 #### To modify a **Pandora** extension:  </a>
 
-| You type:                |        Result after pressing `F8`                                |
-|:-------------------------|:----------------------------------------------------------|
-| !!    | Lists all **Pandora** extensions|
-| paned | Same as above|  
-| !!xxx | Same as above, name contains `xxx` |
-| !! xxx| Same as above|
-| paned xxx| Same as above (note the space after `paned` |
+| Command | Short                |        Result after pressing `F8`                                |
+|:-------|:------------------|:----------------------------------------------------------|
+|<sub>Note 1</sub> paned | !!    | Lists all **Pandora** extensions|
+|<sub>Note 2</sub> paned xxx | !! xxx |File `pan_xxx.prg` is opened in the editor |
 
-Select the one you want to edit, and press **Enter**.
+Note 1: Select the one you want to edit, and press **Enter**.
+
+Note 2: If the named **Pandora** extension means a non existent file, you get an error.
 
 ![exted](Images/panexted.png)
 

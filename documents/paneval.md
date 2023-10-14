@@ -1,4 +1,4 @@
-[![Pandora](Images/pandora2.png)](https://github.com/tbleken/Pandora)
+[![Pandora](Images/pandora2.png)](../README.md)
 ## Insert the result from functions
 
 If you want to insert the `result` of a function into your file, **Pandora** makes this extremely easy.

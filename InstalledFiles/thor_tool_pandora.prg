@@ -10,7 +10,7 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.01'
+#Define ccVersion '1.02'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
@@ -18,12 +18,12 @@ Lparameters lxParam1
 #Define ccCursorfiles 'curFiles'
 #Define ccCR Chr(13)
 #Define ccMaxDescriptLine 15
-#Define ccWantGrid .T.
 #Define ccVFPFilesToList [dbf], [scx], [vcx], [prg], [h], [dbc], [frx], [lbx], [mnx], [txt], [pan]
 #Define ccVFPTablesExtended [dbf], [dbc], [frx], [lbx], [mnx], [pjx], [scx], [vcx]
 
-****************************************************************
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 * Standard prefix for all tools for Thor, allowing this tool to
 *   tell Thor about itself.
 
@@ -69,20 +69,19 @@ Else
 Endif
 
 Return
-
-****************************************************************
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 * Normal processing for this tool begins here.                  
 Procedure ToolCode
   Lparameters tcCommand
-  m.loThor = Execscript (_Screen.cThorDispatcher, [Thor Engine=])
-  m.lcFile =  m.loThor.GetOption( ccPandoraText, ccXToolName )
+  Local lcFile, lcParsedText, loEditor
+
+  m.lcFile = GetPandoraFile()
   If Isnull(m.lcFile) Or Empty(m.lcFile)
     m.lcFile = ccPandoraFile
   Endif
   _Screen.AddProperty([cPandoraFile], Alltrim(m.lcFile))
   _Screen.AddProperty([cClip], _Cliptext)
-  m.loThor.SetOption(ccPandoraText, ccXToolName, m.lcFile)
+  SetPandoraFile(m.lcFile)
   If Empty(m.tcCommand)
     m.loEditor = Execscript(_Screen.cThorDispatcher, [class= HighlightedText from Thor_Proc_HighlightedText.PRG], [Statement], .T.)
 
@@ -94,8 +93,8 @@ Procedure ToolCode
   Do ProcessText With m.lcParsedText
 
 Endproc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-****************************************************************
 Function ProcessText
   Lparameters tcLine
 
@@ -111,7 +110,7 @@ Function ProcessText
 
   m.lnWindowType = m.loEditorWin.FindWindow()
   lcLine = Getwordnum(m.tcLine, 1)
-
+*!*      Set Step On 
   If m.lnWindowType = 0 && Command window
     Do Case
       Case Left(m.tcLine, 2) = [//] && Command window
@@ -120,12 +119,18 @@ Function ProcessText
         m.tcLine = [dir ] + Substr(m.tcLine, 2)
       Case Left(m.tcLine, 3) = [**:]
         m.tcLine = [dirall ] + Substr(m.tcLine, 4)
+      Case Left(m.tcLine, 4) = [***:]
+        m.tcLine = [direxe ] + Substr(m.tcLine, 5)
       Case Left(m.tcLine, 2) = [*:]
         m.tcLine = [dir ] + Substr(m.tcLine, 3)
+      Case Left(m.tcLine, 3) = [***]
+        m.tcLine = [direxe ] + Substr(m.tcLine, 4)
       Case Left(m.tcLine, 2) = [**]
         m.tcLine = [dirall ] + Substr(m.tcLine, 3)
       Case Left(m.tcLine, 1) = [*]
         m.tcLine = [dir ] + Substr(m.tcLine, 2)
+      Case Left(m.tcLine, 2) = '0*'
+        m.tcLine = [0 * ] + Substr(m.tcLine, 3)
     EndCase
     If m.tcLine = [dir] And Left(Getwordnum(m.tcLine, 2), 1) = [:]
       m.tcLine = Strtran(m.tcLine, [dir ], [dir], 1, 1)
@@ -135,6 +140,8 @@ Function ProcessText
       _Screen.lPanComment = .T.
     Else
       Do case
+        Case m.lcLine = '***:'
+          m.tcLine = [dirrun ] + Substr(m.tcLine, 5)
         Case m.lcLine = '*:'
           m.tcLine = [dir ] + Substr(m.tcLine, 3)
         Case m.lcLine = '**:'
@@ -144,10 +151,14 @@ Function ProcessText
     EndIf
     
   EndIf
+*!*  Set Step On 
   m.lcLine = GetWordNum(m.tcLine,1)
-  If InList(m.lcLine , 'dirall','dirx')
-     m.tcLine = Stuff(m.tcLine, 0, Len(m.lcLine), [dir:a])   
-  EndIf 
+  Do case
+    Case InList(m.lcLine , 'dirall','dirx')
+       m.tcLine = Stuff(m.tcLine, 0, Len(m.lcLine), [dir:a])   
+    Case InList(m.lcLine , 'dirrun','direxe')
+       m.tcLine = Stuff(m.tcLine, 0, Len(m.lcLine), [dir:r])   
+  Endcase 
   m.lcCommand = Lower(Getwordnum(m.tcLine, 1))
   m.lcParam1 = Ltrim(Strextract(m.tcLine, m.lcCommand, [], 1, 1))
   If At([&] + [&], m.lcParam1) > 0
@@ -222,6 +233,7 @@ Function ProcessText
       Modify Command (_Screen.cPandorafile) nowait
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And m.lcCommand = [0] And m.lcParam1 = [?]
       ReportPandoraFile()
+      CutCurrentLine()  
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And m.lcCommand = [0] And !Empty(m.lcParam1)
       ChangePandoraFile(m.lcParam1)
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And Empty(m.lcParam1) And m.lnWindowType = 0 && and m.lnWindowType = 0
@@ -241,7 +253,7 @@ Function ProcessText
       Else
         getlinestoprocess(Val(m.lcParam1 ))
       Endif
-    Case m.lnWindowType > 0 And (Left(m.lcCommand, 4) = [#inc] Or Left(m.lcCommand, 3) = [inc])
+    Case m.lnWindowType > 0 And (Left(m.lcCommand, 4) = [#inc] Or Left(m.lcCommand, 3) = [inc] or m.lcCommand == [#])
       GetHeader(m.lcCommand, m.lcParam1  )
     Case Inlist(m.lcCommand, [br], [browse])
       m.lcdata = GetDataFromGrid(Dbf(), [], ,.T.)
@@ -314,14 +326,28 @@ Function ProcessText
       Endtry
   Endcase
   _Cliptext = _Screen.cClip
-Endfunc
-**********************************************************************
+EndFunc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+Function CheckOrCreatePandoraFile
+  If File(_Screen.cPandorafile)
+*!*      Wait Window at 1,1 _screen.cPandorafile + ' exists' time ccWaitTimeout
+    Return .T.
+  Else
+    If Messagebox( [Specified file "] + _Screen.cPandorafile + [" doesn't exist, create empty file?], 4, [File not found!]) = 6
+      Strtofile([], _Screen.cPandorafile)
+      Modify Command (_Screen.cPandorafile) nowait
+    Endif
+    Return .F.
+  Endif
+EndFunc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure ChangePandoraFile
   Lparameters tcFile
-  Local laFiles[1], lcFile, lnFiles, lnX, loThor
 
-  m.loThor = Execscript (_Screen.cThorDispatcher, [Thor Engine=])
-  m.lcFile =  Lower(Trim(m.loThor.GetOption( ccPandoraText, ccXToolName )))
+  Local laDummy[1], laFiles[1], lcFile, lnFiles, lnLines, lnX, loThor
+
+  m.lcFile =  GetPandoraFile()
   If Inlist(m.tcFile, [*], [-], [+], [/])
     m.lnFiles = Adir(laFiles, [*.pan])
     Do Case
@@ -330,9 +356,10 @@ Procedure ChangePandoraFile
       Case m.lnFiles = 1
         m.lcFile = m.laFiles(1, 1)
       Otherwise
-        Create Cursor curPanFiles (Filename c(25), Date T)
+        Create Cursor curPanFiles (Filename c(25), Date T, Size i, LineS i)
         For m.lnX = 1 To m.lnFiles
-          Insert Into curPanFiles (Filename, Date) Values (Lower(m.laFiles(m.lnX, 1)), dir2dt(m.laFiles(m.lnX, 4), m.laFiles(m.lnX, 3)))
+          m.lnLines = Alines(laDummy, Filetostr(m.laFiles(m.lnX, 1)))
+          Insert Into curPanFiles (Filename, Date, Size, LineS) Values (Lower(m.laFiles(m.lnX, 1)), dir2dt(m.laFiles(m.lnX, 4), m.laFiles(m.lnX, 3)), m.laFiles(m.lnX, 2), m.lnLines)
         Endfor
         Index On Filename Tag Filename
         Index On Date Tag Date
@@ -341,29 +368,52 @@ Procedure ChangePandoraFile
     Endcase
   Else
     m.lcFile = Forceext(Trim(m.tcFile), [pan])
-  Endif
-  m.loThor.SetOption(ccPandoraText, ccXToolName, m.lcFile)
+    If !File(m.lcFile)
+      If Messagebox( [Specified file "] + m.lcFile + [" doesn't exist, create empty file?], 4, [File not found!]) = 6
+        Strtofile([], m.lcFile )
+        Modify Command (m.lcFile ) Nowait
+      Else
+        m.lcFile = []
+      Endif
+    Endif
+  EndIf
+  If !Empty(m.lcFile)
+      SetPandoraFile(m.lcFile)
+  EndIf
   ReportPandoraFile()
 Endproc
-
-**********************************************************************
-
-Procedure ReportPandoraFile
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Function GetPandoraFile
   Local lcFile, loThor
 
   m.loThor = Execscript (_Screen.cThorDispatcher, [Thor Engine=])
   m.lcFile =  Trim(m.loThor.GetOption( ccPandoraText, ccXToolName ))
-  CutCurrentLine()
+  Return m.lcFile
+Endfunc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Procedure SetPandoraFile
+  Lparameters tcFile
+  Local loThor
+
+  m.loThor = Execscript (_Screen.cThorDispatcher, [Thor Engine=])
+  m.loThor.SetOption(ccPandoraText, ccXToolName, m.tcFile)
+Endproc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Procedure ReportPandoraFile
+  Local lcFile
+  m.lcFile = GetPandoraFile()
   Messagebox( [Active "Pandora" file is ] + m.lcFile, 64, [Pandora])
 Endproc
 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Procedure ListDescript
 
   Lparameters tcText, tcCommand
   Local laDummy[1], lcContents, lcDescript, lcFile, lcText, lnFiles, lnHandle, lnX1, loContextMenu
   Local loEditorWin As EditorWin Of Home(0) + [Tools\Thor\Thor\Tools\procs\thor_proc_editorwin.prg]
+  Local lcSelected
+
   m.tcText = Evl(m.tcText, [])
   Local laFiles[1], lnX
   Dimension m.laFiles(1)
@@ -401,34 +451,14 @@ Procedure ListDescript
       Select * From (ccCursorfiles) Where m.lcText $ Lower(Filename) Or m.lcText $ Lower(Descript) Order By uDescript Into Cursor (ccCursorfiles) Readwrite
     Endfor
   Endif
-  If ccWantGrid 
-    Go Top
-    m.lcSelected = GetDataFromGrid([Prg files with description], [Filename], 1)
-    If !Empty(m.lcSelected)
-      refreshCommandWindow([ed ] + m.lcSelected, m.tcCommand + [ ] + m.tcText )
-    Endif
-  Else
-    m.loContextMenu = Execscript (_Screen.cThorDispatcher, [class= contextmenu])
-    Scan
-      m.loContextMenu.AddMenuItem(Trim(Descript) + [ - ] + Trim(Filename), , Filename, , Trim(Filename)  )
-    Endscan
-    m.lcPrefix = [ed ]
-    If m.loContextMenu.Activate()
-      If !Empty(m.loContextMenu.KeyWord)
-        If Empty(m.lcPrefix)
-          m.lcText =  Ltrim(m.loContextMenu.KeyWord )
-        Else
-          m.lcText = m.lcPrefix + [ ] + Ltrim(m.loContextMenu.KeyWord )
-        Endif
-        refreshCommandWindow(m.lcText, m.tcCommand + [ ] + m.tcText )
-      Else
-        Wait Window [nothing to do]
-      Endif
-    Endif
+  Go Top
+  m.lcSelected = GetDataFromGrid([Prg files with description], [Filename], 1)
+  If !Empty(m.lcSelected)
+    refreshCommandWindow([ed ] + m.lcSelected, m.tcCommand + [ ] + m.tcText )
   Endif
 
 Endproc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Function dir2dt
   Lparameters tcTime, ttDate
@@ -441,19 +471,21 @@ Function dir2dt
   m.lnYear = Year(m.ttDate)
   Return Datetime(m.lnYear, m.lnMonth, m.lnDay, m.lnHour, m.lnMin, m.lnSec)
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure ListFiles
   Lparameters tcFilter, tcPrefix, tlThor
 
   Local laDummy[1], lcOption, lcText, lcWord, llRecords, lnFiles, lnX, loContextMenu
   Local lcFilename
   Local lnMemo
+  Local lcDescript, lcFile, lcShow
+
+  m.lcOption = Getwordnum(Strextract(m.tcPrefix, [:], []), 1)
   If _Screen.lTest
-    Text to lcShow noshow textmerge
-      tcFilter : <<m.tcFilter >>
-      tcPrefix : <<m.tcPrefix >>
-    EndText
-    messagebox( m.lcShow)
+    Text To m.lcShow Noshow Textmerge
+      tcFilter : <<m.tcFilter >> tcPrefix : <<m.tcPrefix >> Option <<m.lcOption >>
+    Endtext
+    Wait Window At 1, 1 m.lcShow
   Endif
   m.lcOption = Getwordnum(Strextract(m.tcPrefix, [:], []), 1)
   m.tcFilter = Evl(m.tcFilter, [*])
@@ -467,8 +499,11 @@ Procedure ListFiles
   Endif
   If m.lnFiles = 0
     Return
-  EndIf
-*!*    Browse Normal 
+  Endif
+  If [r] $ m.lcOption
+    Select * From (ccCursorfiles) Into Cursor (ccCursorfiles) Readwrite Where Inlist(Lower(Justext(Fname)), [prg], [scx])
+  Endif
+
   Update (ccCursorfiles) Set Fname = [ ] + Fname Where Empty(Justpath(Fname))
   If m.tcFilter = [*]
     Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (ccCursorfiles) ;
@@ -487,12 +522,12 @@ Procedure ListFiles
     Endfor
   Endif
   If Reccount(ccCursorfiles) = 0
-    Wait Window [No files found !!!!!]
+    Wait Window [No files found !!!!!] Time ccWaitTimeout
     Return
   Endif
   Select f1 As Filename, Alltrim(Fname) As FullName, Filedate, FileSize From (ccCursorfiles) Into Cursor (ccCursorfiles) Readwrite Order By 1
   m.llRecords = .F.
-  If [a] $ m.lcOption
+  If [a] $ m.lcOption Or [r] $ m.lcOption
     Select Count(*) From (ccCursorfiles) Where Inlist(Lower(Justext(Filename)), ccVFPTablesExtended) Into Array laDummy
   Else
     Select Count(*) From (ccCursorfiles) Where Inlist(Lower(Justext(Filename)), [dbf]) Into Array laDummy
@@ -502,69 +537,72 @@ Procedure ListFiles
     Alter Table (ccCursorfiles) Add Column RecordS i
     Alter Table (ccCursorfiles) Add Column MemoSize i
   Endif
-  If [a] $ m.lcOption
-    Set Filter To Inlist(Lower(Justext(Filename)), ccVFPTablesExtended)
-  Else
-    Set Filter To Inlist(Lower(Justext(Filename)), [dbf])
-  Endif
+  Do Case
+    Case [a] $ m.lcOption Or [r] $ m.lcOption
+      Set Filter To Inlist(Lower(Justext(Filename)), ccVFPTablesExtended)
+    Otherwise
+      Set Filter To Inlist(Lower(Justext(Filename)), [dbf])
+  Endcase
   Scan For RecordS = 0
     Replace RecordS With GetRecordsInDBF(FullName)
-    Replace MemoSize with GetMemoSize(FullPath(Fullname))
+    Replace MemoSize With GetMemoSize(Fullpath(FullName))
   Endscan
   Set Filter To
-  If [a] $ m.lcOption
+  If [a] $ m.lcOption Or [r] $ m.lcOption
     Alter Table (ccCursorfiles) Add Column LineS i
     Alter Table (ccCursorfiles) Add Column Text m
     AddLinesAndText()
     Alter Table (ccCursorfiles) Add Column Descript c(100)
-        Scan
-        m.lcFile = Alltrim(Fullname)
-        m.lcDescript = GetDescript(m.lcFile )
-        If !Empty( m.lcDescript )
-          Replace Descript With m.lcDescript
-        Endif
-      EndScan
-      Index on Upper(descript) tag descript
-      Go Top
+    Scan
+      m.lcFile = Alltrim(FullName)
+      m.lcDescript = GetDescript(m.lcFile )
+      If !Empty( m.lcDescript )
+        Replace Descript With m.lcDescript
+      Endif
+    Endscan
+    Index On Upper(Descript) Tag Descript
+    Go Top
   Endif
   If !Empty(Field([records]))
     Index On RecordS Tag RecordS
-    Index on Memosize tag MemoSize
+    Index On MemoSize Tag MemoSize
   Endif
   Index On Upper(FullName) Tag FullName
   Index On Upper(Filename) Tag Filename
   Index On Filedate Tag Filedate
   Index On FileSize Tag FileSize
   Set Order To
-  If ccWantGrid
-    m.lcText = GetDataFromGrid([Select a file:], [fullname], 0)
-    Do Case
-      Case [x] $ m.lcOption
-        ConfirmDelete(m.lcText)
-      Case Lower(Justext(m.lcText)) = [pan]
-        Modify Command (m.lcText) nowait
-      Case !Empty(m.lcText)
-        RunEd(FullPath(m.lcText))
-    Endcase
-  Else
-    m.loContextMenu = Execscript (_Screen.cThorDispatcher, [class= contextmenu])
-    Scan
-      m.loContextMenu.AddMenuItem(Trim(FullName), , FullName, , Trim(FullName)  )
-    Endscan
-    If m.loContextMenu.Activate()
-      If !Empty(m.loContextMenu.KeyWord)
-        m.lcText = Ltrim(m.loContextMenu.KeyWord )
-        refreshCommandWindow([ed ] + m.lcText, m.tcPrefix + m.tcFilter )
-      Else
-        Wait Window [nothing to do]
-      Endif
-    Endif
-  Endif
+  m.lcText = GetDataFromGrid([Select a file:], [fullname], 0)
+  Do Case
+    Case [r] $ m.lcOption And Inlist(Lower(Justext(m.lcText)), [prg], [scx])
+      RunProgram(m.lcText)
+    Case [x] $ m.lcOption
+      ConfirmDelete(m.lcText)
+    Case Lower(Justext(m.lcText)) = [pan]
+      Modify Command (m.lcText) Nowait
+    Case !Empty(m.lcText)
+      RunEd(Fullpath(m.lcText))
+  Endcase
 
 
 Endproc
-
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+Procedure RunProgram
+  Lparameters tcFile
+  lcExt = Lower(JustExt(m.tcFile))
+  Do case
+    Case m.lcExt = 'prg'
+      lcCommand = Textmerge('do <<m.tcFile>>')
+    Case m.lcExt = 'scx'
+      lcCommand = Textmerge('do form <<m.tcFile>>')
+  EndCase
+  Try 
+    ExecScript(m.lcCommand)
+  Catch
+    messagebox( "Can not run file!",48,m.tcFile)
+  Endtry
+Endproc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure refreshCommandWindow
   Lparameters tcText, tcOriginal
   Local loEditorWin
@@ -577,7 +615,7 @@ Procedure refreshCommandWindow
   Endif
 Endproc
 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function ConfirmDelete
 Lparameters tcFile
   If Lower(JustExt(m.tcFile)) = 'prg' 
@@ -598,7 +636,7 @@ Lparameters tcFile
     Endif
   Endif
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetRecordsInDBF
   Lparameters tcFileName
   Local lcContents, lcLen, lnHandle
@@ -626,11 +664,11 @@ Function GetRecordsInDBF
   Endtry
   Return m.lnRec
 EndFunc 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetMemoSize
   Lparameters tcFileDBF
   Local laDummy[1], lcFileMemo, lnFiles, lnReturn
-
+  m.lnReturn = 0
   Do Case
     Case Lower(Justext(m.tcFileDBF)) = [dbf]
       m.lcFileMemo = Forceext(m.tcFileDBF, [fpt])
@@ -638,16 +676,18 @@ Function GetMemoSize
       m.lcFileMemo = Forceext(m.tcFileDBF, [dct])
     Case Inlist(Lower(Justext(m.tcFileDBF)), [vcx], [scx], [frx], [lbx], [mnx], [pjx])
       m.lcFileMemo = Forceext(m.tcFileDBF, Left(Lower(Justext(m.tcFileDBF)), 2) + [t])
-  Endcase
-  m.lnFiles = Adir(laDummy, m.lcFileMemo)
-  If m.lnFiles = 1
-    m.lnReturn = m.laDummy(1, 2)
-  Else
-    m.lnReturn = 0
+    Otherwise 
+      m.lcFileMemo = ''
+  EndCase
+  If !Empty(m.lcFileMemo)
+    m.lnFiles = Adir(laDummy, m.lcFileMemo)
+    If m.lnFiles = 1
+      m.lnReturn = m.laDummy(1, 2)
+    Endif
   Endif
   Return m.lnReturn
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetThorFiles
   Lparameters tcMask, tcCursor
   Local laDummy[1], laFolders[1], lcFileSkel, lnFiles, lnFolders, lnX, lnX2
@@ -681,7 +721,7 @@ Function GetThorFiles
   Endfor
   Return Reccount()
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function ListProjects
   Local lcClip, lcTable, lcText, loEditorWin
   Local lcSelected
@@ -692,7 +732,7 @@ Function ListProjects
   m.lcClip = _Cliptext
   m.loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
   If m.loEditorWin.FindWindow() = 0
-    Create Cursor curProjects (text1 c(200), Projnotxt c(3), Project c(50), projno i)
+    Create Cursor curProjects (text1 C(200), Projnotxt C(3), Project C(50), projno i)
     Append From (m.lcTable) Sdf
     Replace All Projnotxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
       projno With Val(Strextract(text1, [#], [ ], 1))
@@ -701,25 +741,9 @@ Function ListProjects
       Where x.projno > 0 Order By projno;
       Into Cursor curProjects Readwrite
     If _Tally > 0
-      If ccWantGrid And File([pg.vcx])
-        Select Projnotxt As ProjectNo, Project  From curProjects Into Cursor curProjects Readwrite
-        Go Top
-        m.lcText = GetDataFromGrid([Select project], [projectno])
-        If !Empty(m.lcText)
-          ProcessText(m.lcText)
-        Endif
-      Else
-
-        m.loContextMenu = Execscript (_Screen.cThorDispatcher, [class= contextmenu])
-        Scan
-          m.loContextMenu.AddMenuItem(Ltrim(curProjects.Projnotxt) + curProjects.Project, , , , curProjects.Projnotxt)
-        Endscan
-        If m.loContextMenu.Activate()
-          m.lcText = Trim(m.loContextMenu.KeyWord)
-        Else
-          m.lcText = []
-        Endif
-      Endif
+      Select Projnotxt As ProjectNo, Project  From curProjects Into Cursor curProjects Readwrite
+      Go Top
+      m.lcText = GetDataFromGrid([Select project], [projectno])
       If !Empty(m.lcText)
         ProcessText(m.lcText)
       Endif
@@ -728,7 +752,7 @@ Function ListProjects
   Endif
 Endfunc
 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function ReturnUnknownCommand
   Lparameters tnText
   _Cliptext = _Screen.cClip
@@ -741,7 +765,7 @@ Function ReturnUnknownCommand
   Wait Window m.lcText Timeout ccWaitTimeout
 Endfunc
 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetHeader
   Lparameters tcOriginalLine, tcParameter
   Local laHeaders[1], lcNewText, loEditorWin
@@ -761,7 +785,7 @@ Function GetHeader
     CutCurrentLine()
   Endif
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function TryExecute(tcParameter)
   Try
     Execscript(m.tcParameter )
@@ -770,7 +794,7 @@ Function TryExecute(tcParameter)
   Endtry
 Endfunc
 
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function WriteCurrentLine
   Lparameters tcText
   Local lcClip, loEditorWin
@@ -782,7 +806,7 @@ Function WriteCurrentLine
   m.loEditorWin.Insert(m.tcText)
 
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function CutCurrentLine
   Local loEditorWin
   m.lcClip = _Cliptext
@@ -794,7 +818,8 @@ Function CutCurrentLine
   m.loEditorWin.Cut()
   Return m.lcText
 Endfunc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 Function HighlightCurrentLine
   Local lnEndPos, loEditorWin
 
@@ -805,7 +830,7 @@ Function HighlightCurrentLine
   Endif
   m.loEditorWin.Select(m.loEditorWin.GetLineStart(m.loEditorWin.GetSelStart(), 0), m.lnEndPos )
 Endfunc
-**********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function getlinestoprocess
   Lparameters tnGroup
   Local laLines[1], lcCommand, lnCounter, lnLine, lnLines
@@ -836,35 +861,8 @@ Function getlinestoprocess
   Endif
 Endfunc
 
-**********************************************************************
-Function CheckOrCreatePandoraFile
-  If File(_Screen.cPandorafile)
-    Return .T.
-  Else
-    If Messagebox( [Specified file "] + _Screen.cPandorafile + [" doesn't exist, create empty file?], 4, [File not found!]) = 6
-      Strtofile([], _Screen.cPandorafile)
-      Modify Command (_Screen.cPandorafile) nowait
-    Endif
-    Return .F.
-  Endif
-Endfunc
-**********************************************************************
-Function InsertIndents
-  Lparameters tcText, tcIndent
-  Local laDummy[1], lcReturn, lcText
 
-  m.tcText = Evl(m.tcText, _Cliptext)
-  If Vartype(m.tcIndent) # [C]
-    m.tcIndent = Evl(m.tcIndent, Space(0))
-  Endif
-  Alines(laDummy, m.tcText )
-  m.lcReturn = []
-  For Each m.lcText In m.laDummy
-    m.lcReturn = m.lcReturn + m.tcIndent + m.lcText  + ccCR
-  Endfor
-  Return m.lcReturn
-Endfunc
-*************************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Function RunEd(tcPar)
   m.lcParOrg = m.tcPar
@@ -950,7 +948,7 @@ Function RunEd(tcPar)
       m.loTools.Editsourcex(m.lcParam1 )
   Endcase
 Endfunc
-*************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Function GetAllFiles(tcDirectory, laFiles)
   Local laTemp[1, 5], ;
@@ -983,7 +981,8 @@ Function GetAllFiles(tcDirectory, laFiles)
   Endfor
   Set Default To (m.lcOldDir)
   Return Alen(m.laFiles, 1)
-  *****************************************************************
+Endfunc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetNumberedline
   Lparameters tcFile, tnLine
   m.lnLines = Alines(laDummy, Filetostr(m.tcFile))
@@ -1002,7 +1001,7 @@ Function GetNumberedline
   Endif
   Return m.lcReturn
 Endfunc
-**************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetLineNo
   Lparameters tcFile, tnLine
   m.lnLines = Alines(laDummy, Filetostr(m.tcFile))
@@ -1012,7 +1011,7 @@ Function GetLineNo
   Endif
   Return m.lcReturn
 Endfunc
-**************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function shellX
   Lparameters tcURL, tcParameter
   If Empty(m.tcParameter)
@@ -1028,13 +1027,14 @@ Function shellX
     String cParams, String cDir, Integer nShowWin
   ShellExecute( 0, [open], m.tcURL, m.tcParameter, [], SW_SHOWNORMAL )
 Endfunc
-**************************************************  
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Function clipIsText
   #Define CF_TEXT           1
   Declare short IsClipboardFormatAvailable In win32api Integer cbformat
   Return IsClipboardFormatAvailable(CF_TEXT) # 0
-  **************************************************  
+Endfunc
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 Function FindFile
   Lparameters tcFile, tcFilter
@@ -1069,7 +1069,7 @@ Function FindFile
   Return m.lcReturn
 Endfunc
 
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure BrowseHotKeys
   #Define ccTool         'Browse all Thor Tools'
   m.llExcludeNotUsed = Execscript(_Screen.cThorDispatcher, [Get Option=], ccTool, ccTool)
@@ -1100,7 +1100,7 @@ Procedure BrowseHotKeys
   Endif
 
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure BrowseAllTools
   #Define ccTool         'Browse all Thor Tools'
   Local laDummy[1], lcDesc, lcDestAlias, lcHotkey, lcProg, llExcludeNotUsed, lnSelect
@@ -1144,7 +1144,7 @@ Procedure BrowseAllTools
 *!*      CutCurrentLine()
 *!*    Endif
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetDataFromGrid
   Lparameters tcCaption, tcReturnField, tnHideColumns, tlModeless
   Local lcHideColumns, lcParameter, lcReturn, lcVCXFile
@@ -1177,7 +1177,7 @@ Function GetDataFromGrid
   Endif
   Return m.lcReturn
 Endfunc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure ListAllCustomTools
   Lparameters tcFileName
   Local lnSelect
@@ -1234,7 +1234,7 @@ Procedure ListAllCustomTools
     CutCurrentLine()
   Endif
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure EditCustomTool
   Lparameters tcCommand
   m.lcProg = Substr(m.tcCommand, 3)
@@ -1276,7 +1276,7 @@ Procedure EditCustomTool
 
   Endif
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetFilesInPath
   Lparameters tcMask, tcCursor
   Local laDummy[1], laFolders[1], lcFileSkel, lnFiles, lnFolders, lnX, lnX2
@@ -1306,7 +1306,7 @@ Function GetFilesInPath
   Endfor
   Return Reccount()
 Endfunc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function GetDescript
   Lparameters tcFile
   Local lcContents, lcDescript, lnHandle, lnX1
@@ -1323,7 +1323,7 @@ Function GetDescript
   Fclose(m.lnHandle)
   Return m.lcDescript
 Endfunc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function InsertMethod
   Lparameters tcMethod
   Local laProc[1], lcCode, lcMethod, lcProc, lcSource, lcText, lnProcs, lnSelect, lnX
@@ -1345,7 +1345,7 @@ Function InsertMethod
       m.lcSource = curprgs.Fname
       m.lnProcs = Aprocinfo(laProc, curprgs.Fname, 0)
       For m.lnX = 1 To m.lnProcs
-        If m.laProc(m.lnX, 3) = [Procedure] And ![.] $ m.laProc(m.lnX, 1) And (m.lcMethod $ m.laProc(m.lnX, 1) Or Empty(m.lcMethod))
+        If m.laProc(m.lnX, 3) = [Procedure] And ![.] $ m.laProc(m.lnX, 1) And (m.lcMethod $ Lower(m.laProc(m.lnX, 1)) Or Empty(m.lcMethod))
           m.lcProc = m.laProc(m.lnX, 1)
           m.lcCode = methodfromprg(m.lcProc, m.lcSource)
           Insert Into CurMethods (Source, Method, Code) Values (m.lcSource, m.lcProc, m.lcCode )
@@ -1373,7 +1373,7 @@ Function InsertMethod
 
 Endfunc
 
-********************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function methodfromprg
   Lparameters tcProcedure, tcFile
   Local laDummy[1], lcFile, lcProc, lcReturn, lnEnd, lnStart, lnX
@@ -1410,7 +1410,7 @@ Function methodfromprg
   Return m.lcReturn
 Endfunc
 
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure AddLinesAndText
   Local lnMemo
 
@@ -1426,7 +1426,7 @@ Procedure AddLinesAndText
   Set Memowidth To m.lnMemo
   Index On LineS Tag LineS
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure InsertResult
   Lparameters tcMethod
   m.lcText = []
@@ -1445,7 +1445,7 @@ Procedure InsertResult
 
 Endproc
 
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Procedure MakeDD && Creates DoDefault call
   Local lcResult
 
@@ -1453,7 +1453,7 @@ Procedure MakeDD && Creates DoDefault call
   CutCurrentLine()
   WriteCurrentLine(m.lcResult)
 Endproc
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Function CreatePandoraCursor
   Lparameters tnWindowType
 
@@ -1465,10 +1465,12 @@ Function CreatePandoraCursor
   Local laPandoraChoices[1], lcPandoraOptions, lnLines, lnX
   m.lnSelect = Select()
   Text To m.lcPandoraOptions Noshow Textmerge Pretext 7
-      Dir    | *: | Picklist of all VFP files in the path              | cef |    |
-      *      |    | Picklist of all VFP files in the path              | c   |    |
-      DirX   | **:| Picklist of VFP files with extended information    | cef |    |
-      **     |    | Picklist of VFP files with extended information    |  c  |    |
+      Dir    | *: | Picklist of all VFP files in the path, edit        | ef  |    |
+      Dir    | *  | Picklist of all VFP files in the path, edit        | c   |    |
+      DirX   | **:| Picklist of VFP files with more information, edit  |  ef |    |
+      DirX   | ** | Picklist of VFP files with more information, edit  |  c  |    |
+      DirRun |***:| Picklist of VFP files with more information, run   |  ef |    |
+      DirRun |*** | Picklist of VFP files with more information, run   | c   |    |
       Desc   |    | Picklist of prg files with a description           | c   |    |
       Desc   |    | Adds "* Description *" template to the active file | ef  |    |
       <blank>|    | Opens default files listed in active .pan file     |  c  |    |
@@ -1510,7 +1512,7 @@ Function CreatePandoraCursor
   Index On Lower(Descript) Tag Descript
   Index On Lower(Short) Tag Short
   Index On Trigger Tag Trigger
-  m.lcProg = GetDataFromGrid([Pandora "commands" aaa], [trigger], 1)
+  m.lcProg = GetDataFromGrid([Pandora "commands"], [trigger], 1)
   lcAsk = ''
   If !Empty(m.lcProg)
     Select ask from curPandora where Alltrim(m.lcProg) = Alltrim(trigger) into cursor CurPandora
@@ -1539,7 +1541,7 @@ Function CreatePandoraCursor
 Endfunc
 
 
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Define Class clsSetPandoraFile As Custom
 
   Tool      = ccXToolName
@@ -1548,7 +1550,7 @@ Define Class clsSetPandoraFile As Custom
   EditClassName = ccContainerClassName && clsPandoraSettings
 
 Enddefine
-****************************************************************
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 Define Class clsPandoraSettings As Container
   Procedure Init
     m.loRenderEngine = Execscript(_Screen.cThorDispatcher, [Class= OptionRenderEngine])

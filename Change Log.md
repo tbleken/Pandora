@@ -1,3 +1,12 @@
+### 2023-10-14, Version 1.02 ###
+
+Added new command `Dirrun` and the shorter version, `***` and `***:`  
+This command will limit the listed files to .prg and .scx, and **run** the selected file.  
+
+Changed the short command for `Inc` to `#`.
+
+Several minor changes to the documentation.
+
 ### 2023-10-5, Version 1.01 ###
 
 Changed the syntax for the Dir commands, and in which window the different syntax versions can be used. 
