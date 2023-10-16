@@ -6,10 +6,11 @@ Version 1.02 Released 2023-10-14
 [What's new in this release](Change%20Log.md)
 
 *** 
+![Pandora](documents/Images/pandora2.png) is a collection of powerful VFP add-on tools that are launched via command line syntax followed by pressing a hotkey. 
 
-Pandora provides a wide range of programmers' tools, accessible either from a code window or the command window.  These tools are accessed by entering a few characters ("commands") and then pressing the dedicated hotkey, e.g. `F8`. In this documentation `F8` is consistently used as Hotkey for `Pandora`.  
+In this documentation `F8` is used as this hotkey, for consistency. It can easily be changed by using one of [Thor's](https://github.com/VFPX/Thor) tools.
  
-Some of these programmers' tools are unique to `Pandora`, others provide access to existing Thor tools.  
+Some of these programmers' tools are unique to `Pandora`, while others provide access to existing Thor tools.  
 This is a list of all the "commands" that `Pandora` supports, along with a short description. Click the text for details.
 
 **Note:** Some "commands" also have a shorter version, you can see them in the second column. And all `Pandora` commands are case insensitive.
