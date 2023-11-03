@@ -16,7 +16,9 @@ Introducing `Pandora` "project organizer"
 
 ## 1. Your "busy files" list `Pandora.pan` </a>
 
-To really take advantage of **Pandora**, create a file named `Pandora.pan` in your working folder. This filename can be changed using `Alt-F12`, select `Options->Pandora`. In this document this file is consistently called `Pandora.pan`.
+To really take advantage of **Pandora**, Pandora will create a file named `Pandora.pan` in your working folder. In this document this file is consistently called `Pandora.pan`.
+
+Note that you can have several `.pan` files, but only one can be active at the time. 
 
 If the file `Pandora.pan` doesn't exist, it can be created in three ways:
 1. In the Command window, press `F8` in a blank line, and confirm.
@@ -158,3 +160,4 @@ Likewise, a URL will be opened in the default Browser.
 
   
 ![Project](Images/panproj.png)
+

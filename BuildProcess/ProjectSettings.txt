@@ -1,6 +1,6 @@
 AppName   = Pandora
 AppID     = Pandora
-Version   = 1.02
+Version   = 1.03
 Component = No
 
 ChangeLog      = Change Log.md

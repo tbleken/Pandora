@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.02 - 20231014'
-	.AvailableVersion = 'Pandora-1.02-08687-20231014'
+	.VersionNumber    = '1.03 - 20231103'
+	.AvailableVersion = 'Pandora-1.03-08707-20231103'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,6 +13,12 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
+### 2023-11-03, Version 1.03
+
+Changed how `Pandora` stores the name of the currently selected `.pan` project file. The name of this file is now stored in `Pandora.txt` in the current folder. If no `Pandora.txt` file exists, the default `Pandora.pan` is used. This makes it possible to have separate active `Pandora` projects for different folders.
+
+Added options for TA command: It now allows a parameter which will be added to the name of the test area. See [Your easy accessible testing area Pandora.prg](documents/panta.md) for details.
+
 ### 2023-10-14, Version 1.02 ###
 
 Added new command `Dirrun` and the shorter version, `***` and `***:`  
@@ -24,7 +30,7 @@ Several minor changes to the documentation.
 
 ### 2023-10-5, Version 1.01 ###
 
-Changed the syntax for the Dir commands, and in which window the different syntax versions can be used. 
+Changed the syntax for the Dir commands, and in which window the different syntax versions can be used.
 Most important is the new DirX command and the command's shorter versions,
 `**` and `**:`. The latter, and `\*:` which is short for `Dir`,  can now also be used in all of VFP's editors.  
 
@@ -36,10 +42,9 @@ Corrected the documentation for Pandora's command `Ins`.
 
 ### 2023-10-2, Version 1.00 ###
 
-#### First release of `Pandora` to go public!
+#### First release of `Pandora` to go public
 
 ![Picture](./documents/Images/vfpxpoweredby_alternative.gif)
-
 
 endtext
 return lcNotes
