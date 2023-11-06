@@ -1,3 +1,10 @@
+### 2023-11-06, Version 1.04
+
+Added two new commands, both have similar behavior but with different parameters and results.
+
+**RT:** Generates random, readable but meaningless text. For creating "dummy" values.  
+**Lorem:** Generates random and meaningless text. Also for creating "dummy" text.
+
 ### 2023-11-03, Version 1.03
 
 Changed how `Pandora` stores the name of the currently selected `.pan` project file. The name of this file is now stored in `Pandora.txt` in the current folder. If no `Pandora.txt` file exists, the default `Pandora.pan` is used. This makes it possible to have separate active `Pandora` projects for different folders.

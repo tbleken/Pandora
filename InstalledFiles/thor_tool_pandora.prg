@@ -11,7 +11,7 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.03'
+#Define ccVersion '1.04'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
@@ -266,6 +266,14 @@ Function ProcessText
       Execscript(_Screen.cThorDispatcher, [peme_snippet_no], m.lcParam1 )
     Case m.lcCommand == [op]
       Execscript(_Screen.cThorDispatcher, [peme_snippet_op], m.lcParam1 )
+    Case m.lcCommand == 'rt'
+      lcText = GetRandomText(Val(GetWordNum( m.lcParam1,1,',')), Val(GetWordNum( m.lcParam1,2,',')))
+      CutCurrentLine()
+      WriteCurrentLine(m.lcText + ccCR )
+    Case m.lcCommand == 'lorem'
+      lcText = GetLoremText(Val(GetWordNum( m.lcParam1,1,',')), Val(GetWordNum( m.lcParam1,2,',')))
+      CutCurrentLine()
+      WriteCurrentLine(m.lcText)
     Case m.lcCommand == [fp]
       m.lcAlias = m.lcParam1
       Execscript(_Screen.cThorDispatcher, [PEME_OpenTable], m.lcAlias)
@@ -1494,6 +1502,112 @@ Procedure MakeDD && Creates DoDefault call
   WriteCurrentLine(m.lcResult)
 Endproc
 *********************************************************************************
+Function GetRandomText
+  Lparameters tnSentences, tnParagraphs
+  m.tnParagraphs = Evl(m.tnParagraphs, 1)
+  m.tnSentences = Evl(m.tnSentences, 1)
+  Return getDataFromUrl(Textmerge([http://metaphorpsum.com/paragraphs/<<Int(m.tnParagraphs)>>/<<Int(m.tnSentences)>>]))
+Endfunc
+*********************************************************************************
+Function GetLoremText
+  Lparameters tnLength, tnParagraphs
+  Local lcLength, lcURL
+
+  m.tnParagraphs = Evl(m.tnParagraphs, 1)
+  m.tnLength = Evl(m.tnLength, 0)
+  Do Case
+    Case Empty(m.tnLength)
+      m.lcLength = [short]
+    Case M.tnLength = 1
+      m.lcLength = [medium]
+    Case M.tnLength = 2
+      m.lcLength = [long]
+    Otherwise
+      m.lcLength = [verylong]
+  Endcase
+  m.lcURL = Textmerge([https://loripsum.net/api/<<Int(m.tnParagraphs)>>/plaintext/<<m.lcLength>>])
+  Return GetDataFromURL(m.lcURL )
+Endfunc
+*********************************************************************************
+
+Function GetDataFromURL
+  Lparameters tcUrlName
+  Local lsReadBuffer
+
+  Declare Integer InternetOpen In wininet.Dll String sAgent, ;
+    Integer lAccessType, String sProxyName, ;
+    String sProxyBypass, Integer lFlags
+
+  Declare Integer InternetOpenUrl In wininet.Dll ;
+    Integer hInternetSession, String sUrl, String sHeaders,;
+    Integer lHeadersLength, Integer lFlags, Integer lContext
+
+  Declare Integer InternetReadFile In wininet.Dll Integer hfile, ;
+    String @sBuffer, Integer lNumberofBytesToRead, Integer @lBytesRead
+
+  Declare short InternetCloseHandle In wininet.Dll Integer hInst
+
+  #Define INTERNET_OPEN_TYPE_PRECONFIG 0
+  #Define INTERNET_OPEN_TYPE_DIRECT 1
+  #Define INTERNET_OPEN_TYPE_PROXY 3
+  #Define SYNCHRONOUS 0
+  #Define INTERNET_FLAG_RELOAD 2147483648
+  #Define CR Chr(13)
+
+  Local lsAgent, lhInternetSession, lhUrlFile, llOk, lnOK, lcRetVal, lcReadBuffer, lnBytesRead
+
+  * what application is using Internet services?
+  m.lsAgent = [VPF 5.0]
+
+  m.lhInternetSession = InternetOpen( m.lsAgent, INTERNET_OPEN_TYPE_PRECONFIG, ;
+      [], [], SYNCHRONOUS)
+
+  * debugging line - uncomment to see session handle
+  * WAIT WINDOW "Internet session handle: " + LTRIM(STR(hInternetSession))
+
+  If m.lhInternetSession = 0
+    Wait Window [Internet session cannot be established] Time 2
+    Return .Null.
+  Endif
+
+  m.lhUrlFile = InternetOpenUrl( m.lhInternetSession, m.tcUrlName, [], 0, ;
+      INTERNET_FLAG_RELOAD, 0)
+
+  * debugging line - uncomment to see URL handle
+  * WAIT WINDOW "URL Handle: " + LTRIM(STR(hUrlFile))
+
+  If m.lhUrlFile = 0
+    Wait Window [URL cannot be opened] Timeout 5
+    Return .Null.
+  Endif
+
+  m.lcRetVal = []
+  m.llOk = .T.
+
+  Do While m.llOk
+    * set aside a big buffer
+    m.lsReadBuffer = Space(32767)
+    m.lnBytesRead = 0
+    m.lnOK = InternetReadFile( m.lhUrlFile, @m.lsReadBuffer, Len(m.lsReadBuffer), @m.lnBytesRead)
+
+    If ( m.lnBytesRead > 0 )
+      m.lcRetVal = m.lcRetVal + Left( m.lsReadBuffer, m.lnBytesRead )
+    Endif
+
+    * error trap - either a read failure or read past eof()
+    m.llOk = ( m.lnOK = 1 ) And ( m.lnBytesRead > 0 )
+  Enddo
+
+  * close all the handles we opened
+  InternetCloseHandle( m.lhUrlFile )
+  InternetCloseHandle( m.lhInternetSession )
+
+  * return the URL contents
+  Return m.lcRetVal
+Endfunc
+
+*********************************************************************************
+
 Function CreatePandoraCursor
   Lparameters tnWindowType
 
@@ -1516,6 +1630,7 @@ Function CreatePandoraCursor
       <blank>|    | Opens default files listed in active .pan file     |  c  |    |
       <blank>|    | Menu                                               | ef  |    |
       0      |    | Opens active .pan file for editing                 | c   |    |
+      Lorem  |    | Random "Lorem Ipsum" text generator                | cef |    |
       Menu   | ?  | Menu                                               | ef  |    |
       Project|pr  | Picklist of projects in active .pan file           | c   |    |
       Help   |    | Opens Pandora page in the default Browser          | cef |    |
@@ -1526,6 +1641,7 @@ Function CreatePandoraCursor
       DD     |    | DoDefault() syntax builder                         | f   |    |
       Pan    | !  | Run or create custom made Pandora extensions       | cef |    |
       Paned  | !! | Edit custom made Pandora extensions                | cef |    |
+      Rt     |    | Random readable text generator                     | cef |    |
       Ta     | .  | Test area "pandora.prg"                            | cef |    |
       Thor   | th | Picklist of registered Thor tools                  | cef |    |
       Hotkeys| hk | Picklist of all assigned hot keys                  | cef |    |

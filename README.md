@@ -1,7 +1,7 @@
 
 [![How Pandora works](documents/Images/pandora2.png)](documents/panhow.md)
 
-Version 1.03 Released 2023-11-03
+Version 1.04 Released 2023-11-06
 
 [What's new in this release](Change%20Log.md)
 
@@ -26,10 +26,12 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 |[Ed](documents/paned.md)|| [An easy way to open most files](documents/paned.md)|
 |[Fp](documents/panfp.md)|| [Field picker to create SQL statements](documents/panfp.md)|
 |[Hotkeys](documents/panhk.md) |[Hk](documents/panhk.md) |[List of all assigned hot keys](documents/panhk.md)|
+|[Lorem](documents/panrt.md) || [Generate random "Lorem Ipsum" text ](documents/panrt.md)|
 |[NO <sub>Note 1</sub>](documents/panno.md)     || [NewObject() syntax builder](documents/panno.md)|
 |[Pan](documents/panext.md) |[!](documents/panext.md)| [Create and run your own `Pandora` extensions](documents/panext.md)|
 |[Paned](documents/panext.md#paned) |[!!](documents/panext.md#paned)| [Edit your own `Pandora` extensions](documents/panext.md#paned)|
 |[Project](documents/panorg.md#proj) |[Pr, Proj](documents/panorg.md#proj)| [List of projects in active .pan file ](documents/panorg.md#proj)|
+|[RT](documents/panrt.md) || [Generate random readable text ](documents/panrt.md)|
 |[Test](documents/panta.md)|[ta](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
 |[Thor](documents/panth.md) |[Th, Tools](documents/panth.md)| [Picklist of registered **Thor** tools](documents/panth.md)|
 |Version |Ver| Shows `Pandora` version number|
