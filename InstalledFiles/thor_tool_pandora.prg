@@ -11,7 +11,7 @@ Lparameters lxParam1
 #Define ccRun 'exe'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.04'
+#Define ccVersion '1.05'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccWaitTimeout 3
 #Define ccDescriptionMask1 '* Description:'
@@ -112,7 +112,6 @@ Function ProcessText
 
   m.lnWindowType = m.loEditorWin.FindWindow()
   lcLine = Getwordnum(m.tcLine, 1)
-*!*      Set Step On 
   If m.lnWindowType = 0 && Command window
     Do Case
       Case Left(m.tcLine, 2) = [//] && Command window
@@ -153,7 +152,6 @@ Function ProcessText
     EndIf
     
   EndIf
-*!*  Set Step On 
   m.lcLine = GetWordNum(m.tcLine,1)
   Do case
     Case InList(m.lcLine , 'dirall','dirx')
@@ -175,11 +173,11 @@ Function ProcessText
   If _Screen.lTest
     Wait Window At 1, 1 Textmerge([Command: <<m.lcCommand >> | Parameter: <<m.lcParam1 >> | Wintype: <<m.lnWindowType >>])
     *!*      Set Step On 
-  Endif
+  EndIf
   Do Case
     Case m.lcCommand == [help]
       RunEd(ccPandoraHelp )
-    Case Inlist(m.lcCommand, [desc], [description])
+    Case Inlist(m.lcCommand, [desc], [description], [de])
       Do Case
         Case m.lnWindowType = 0 && Command window
           ListDescript(m.lcParam1, m.lcCommand )
@@ -229,7 +227,7 @@ Function ProcessText
     Case m.lcCommand == [pan]
       ListAllCustomTools(m.lcParam1 )
     Case Inlist(m.lcCommand, [.], [,], [ta],[test])
-      pantest(m.lcCommand, m.lcParam1)
+      pantestarea(m.lcCommand, m.lcParam1)
 *!*        RunEd([Pandora.prg])
     Case Isdigit(m.lcCommand ) And m.lcCommand = Transform(Val(m.lcCommand)) And Empty(m.lcParam1) And m.lcCommand = [0] && and m.lnWindowType = 0
       CutCurrentLine()
@@ -493,7 +491,7 @@ Procedure ListDescript
     Endfor
   Endif
   Go Top
-  m.lcSelected = GetDataFromGrid([Prg files with description], [Filename], 1)
+  m.lcSelected = GetDataFromGrid([Prg files with description], [Fullname], 1)
   If !Empty(m.lcSelected)
     refreshCommandWindow([ed ] + m.lcSelected, m.tcCommand + [ ] + m.tcText )
   Endif
@@ -543,8 +541,7 @@ Procedure ListFiles
   Endif
   If [r] $ m.lcOption
     Select * From (ccCursorfiles) Into Cursor (ccCursorfiles) Readwrite Where Inlist(Lower(Justext(Fname)), [prg], [scx])
-  Endif
-
+  EndIf
   Update (ccCursorfiles) Set Fname = [ ] + Fname Where Empty(Justpath(Fname))
   If m.tcFilter = [*]
     Select Fname, Cast(Justfname(Fname) As c(50)) As f1, Filedate, FileSize From (ccCursorfiles) ;
@@ -889,12 +886,16 @@ Function getlinestoprocess
       m.lcCommand = Strextract(m.laLines(m.lnCounter), [ ])
       If ccAmp $ m.lcCommand
         m.lcCommand = Strextract(m.laLines(m.lnCounter), [ ], ccAmp, 1)
-      Endif
-      If Lower(Getwordnum(m.lcCommand, 1)) = [do]
-        Execscript(m.lcCommand)
-      Else
-        RunEd(m.lcCommand)
-      Endif
+      EndIf
+      Do case
+        Case Lower(Getwordnum(m.lcCommand, 1)) = [do]
+          Execscript(m.lcCommand)
+        Case Lower(Getwordnum(m.lcCommand, 1)) = [exe]
+          m.lcCommand = Strextract(m.lcCommand , ccRun, [])
+          ExecScript(m.lcCommand) 
+        Otherwise 
+          RunEd(m.lcCommand)
+      Endcase
     Endif
   Endfor
   If !m.llFound
@@ -906,6 +907,9 @@ Endfunc
 *********************************************************************************
 
 Function RunEd(tcPar)
+  Local lcCommand, lcExt, lcFile, lcFolder, lcMethod, lcObject, lcParOrg, lcParam1, lcParameters
+  Local lnLine, lnLineNo, loTools
+
   m.lcParOrg = m.tcPar
   m.lcParam1 = m.tcPar
   If Empty(m.tcPar) Or (Val(m.tcPar) > 0 And m.tcPar = Transform(Val(m.tcPar)))
@@ -935,14 +939,14 @@ Function RunEd(tcPar)
   m.lcFolder = [classes\]
   m.lnLineNo = Int(Val(Strextract(m.lcParam1, [:], [])))
   Do Case
-    Case Empty(JustExt(m.lcParam1)) and Right(m.lcParam1,1)#')' and !InList(Left(m.lcParam1,4),'http','mail')
-      m.lcExt = 'prg'
-      m.lcParam1 = ForceExt(m.lcParam1,m.lcExt)
+    Case Empty(Justext(m.lcParam1)) And Right(m.lcParam1, 1) # [)] And !Inlist(Left(m.lcParam1, 4), [http], [mail])
+      m.lcExt = [prg]
+      m.lcParam1 = Forceext(m.lcParam1, m.lcExt)
     Case [.scx] $ m.lcParam1
       m.lcExt = [scx]
     Case [.vcx] $ m.lcParam1
       m.lcExt = [vcx]
-    Case [.prg] $ m.lcParam1 
+    Case [.prg] $ m.lcParam1
       m.lcExt = [prg]
     Case Occurs([.], m.lcParam1) = 1
       m.lcExt = Justext(m.lcParam1)
@@ -958,7 +962,7 @@ Function RunEd(tcPar)
     Case Inlist(Lower(Strextract(m.lcParam1, [], [:], 1, 4)), [http:], [https:])
       shellX(m.lcParam1)
     Case m.lcExt = [pan]
-      Modify Command (m.tcPar) nowait
+      Modify Command (m.tcPar) Nowait
     Case m.lcExt = [vcx] Or m.lcExt = [scx]
       If [:] $ m.lcParam1
         m.lcParameters = Strextract(m.lcParam1, m.lcExt + [.], [:])
@@ -970,10 +974,11 @@ Function RunEd(tcPar)
       m.loTools = Execscript (_Screen.cThorDispatcher, [Class= tools from pemeditor])
       m.loTools.Editsourcex(m.lcFile, m.lcObject, m.lcMethod, m.lnLineNo)
     Case Getwordnum(m.lcParam1, 1) = ccRun
+      m.lcCommand = Strextract(m.lcParam1, ccRun, [])
       Try
         Execscript(Strextract(m.lcParam1, ccRun, []))
       Catch
-        Wait Window ccUnknownCommand
+        Wait Window m.lcCommand + ccCR + ccUnknownCommand
       Endtry
       TryExecute(Strextract(m.lcParam1, ccRun, []))
     Case m.lcExt = [prg]
@@ -1124,8 +1129,9 @@ Procedure BrowseHotKeys
     m.lcHotkey = HotKey
     Select Recno() From (_Screen.Cthorfolder + [\source\hotkeys])  hotkeys Where hotkeys.Key = Substr(m.lcHotkey, 1 + Rat([+], m.lcHotkey ), 10) Into Array laDummy
     Replace sortkey With Padl(laDummy, 2, [ ]) + m.lcHotkey
-  Endscan
-  Select HotKey, Descript, Favorite, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Order By sortkey Readwrite
+  EndScan
+  Select distinct HotKey, Descript, Favorite, PRGName,sortkey From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Order By sortkey Readwrite
+  Select HotKey, Descript, Favorite, PRGName From (m.lcDestAlias) Into Cursor (m.lcDestAlias) Readwrite
   Index On Lower(HotKey) Tag HotKey
   Index On Lower(Descript) Tag Descript
   Index On Favorite Tag Favorite
@@ -1253,9 +1259,15 @@ Procedure ListAllCustomTools
 
     Endif
   Else
-    m.lcProg = Forceext([pan_] + m.tcFileName, [prg])
+    lcFilename = GetWordNum(m.tcFileName,1)
+    lcPar = GetWordNum(m.tcFileName,2)
+    m.lcProg = Forceext([pan_] + m.lcFileName, [prg])
     If File(m.lcProg )
-      Do (m.lcProg )
+      If !Empty(m.lcPar)
+        Do (m.lcProg ) with m.lcPar 
+      Else
+        Do (m.lcProg ) 
+      Endif
     Else
       If Messagebox( [File ] + m.lcProg + [ is not found], 4 + 48, [Create it?]) = 6
         Do Case
@@ -1459,7 +1471,7 @@ Procedure AddLinesAndText
   Set Memowidth To 8192
   Scan For Inlist(Lower(Justext(Filename)), [prg], [txt], [h],'pan')
     try
-      Replace Text With Filetostr(Alltrim(Filename))
+      Replace Text With Filetostr(Alltrim(Fullname))
       Replace LineS With Memlines(Text)
     catch
     Endtry

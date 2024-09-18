@@ -1,3 +1,9 @@
+### 2024-09-18, Version 1.05
+
+Minor bug fixes.  
+
+Added the possibility to pass a string parameter to custom Pandora extensions. 
+
 ### 2023-11-06, Version 1.04
 
 Added two new commands, both have similar behavior but with different parameters and results.
