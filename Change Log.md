@@ -1,3 +1,9 @@
+### 2024-09-20, Version 1.06
+
+Minor bug fixes.  
+
+Added shorter syntax options for commands Desc (De) and Lorem (Lor).
+
 ### 2024-09-18, Version 1.05
 
 Minor bug fixes.  

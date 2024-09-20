@@ -10,10 +10,10 @@ This text is typically used as "dummy" data during testing and for documentation
 
 Both tools have two parameters which are similar but not identical.  
 
-| Command | Syntax |  
-|:---|:----|  
-|**RT:** |   RT lnSentences, lnParagraphs  |  
-|**Lorem:** | Lorem lnLength, lnParagraphs  |
+| Command | Short version | Syntax |  
+|:---|:--|:--|  
+| `RT` | |  RT lnSentences, lnParagraphs  |  
+| `Lorem` | `Lor`| Lorem lnLength, lnParagraphs  |
 
 Parameter description:  
 lnSentences: Number of returned sentences  

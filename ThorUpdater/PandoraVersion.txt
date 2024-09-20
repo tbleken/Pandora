@@ -1,8 +1,8 @@
 lparameters toUpdateObject
 
 with toUpdateObject
-	.VersionNumber    = '1.05 - 20240918'
-	.AvailableVersion = 'Pandora-1.05-09027-20240918'
+	.VersionNumber    = '1.06 - 20240920'
+	.AvailableVersion = 'Pandora-1.06-09029-20240920'
 	.Component        = 'No'
 	.Notes            = GetNotes()
 endwith
@@ -13,6 +13,12 @@ return toUpdateObject
 procedure GetNotes
 local lcNotes
 text to lcNotes noshow
+### 2024-09-20, Version 1.06
+
+Minor bug fixes.  
+
+Added shorter syntax options for commands Desc (De) and Lorem (Lor).
+
 ### 2024-09-18, Version 1.05
 
 Minor bug fixes.  

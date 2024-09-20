@@ -223,7 +223,7 @@ Function ProcessText
     Case m.lcCommand == [paned]
       EditCustomTool([**] + m.lcParam1 )
     Case Left(m.lcCommand, 1) = [!]
-      ListAllCustomTools(Substr(m.lcCommand, 2) )
+      ListAllCustomTools(Substr(m.lcCommand, 2)  + ' ' + m.lcParam1 )
     Case m.lcCommand == [pan]
       ListAllCustomTools(m.lcParam1 )
     Case Inlist(m.lcCommand, [.], [,], [ta],[test])
@@ -268,7 +268,7 @@ Function ProcessText
       lcText = GetRandomText(Val(GetWordNum( m.lcParam1,1,',')), Val(GetWordNum( m.lcParam1,2,',')))
       CutCurrentLine()
       WriteCurrentLine(m.lcText + ccCR )
-    Case m.lcCommand == 'lorem'
+    Case InList(m.lcCommand, 'lorem','lor')
       lcText = GetLoremText(Val(GetWordNum( m.lcParam1,1,',')), Val(GetWordNum( m.lcParam1,2,',')))
       CutCurrentLine()
       WriteCurrentLine(m.lcText)
@@ -1059,19 +1059,18 @@ Function GetLineNo
 Endfunc
 *********************************************************************************
 Function shellX
-  Lparameters tcURL, tcParameter
-  If Empty(m.tcParameter)
-    m.tcParameter = []
-  Endif
-  #Define SW_HIDE 0
-  #Define SW_SHOWNORMAL 1
-  #Define SW_SHOWMINIMIZED 2
-  #Define SW_SHOWMAXIMIZED 3
+  Lparameters tcURL, tcCommand, tcParameter
+  tcCommand = Evl(m.tcCommand,"open")
+  tcParameter = Evl(m.tcParameter ,"")
+  #define SW_HIDE 0
+  #DEFINE SW_SHOWNORMAL 1
+  #DEFINE SW_SHOWMINIMIZED 2
+  #DEFINE SW_SHOWMAXIMIZED 3
   *!*   Legal verbs: open, edit, print, find, explore, NULL
-  Declare Integer ShellExecute In shell32.Dll ;
-    Integer hndWin, String cAction, String cFileName, ;
-    String cParams, String cDir, Integer nShowWin
-  ShellExecute( 0, [open], m.tcURL, m.tcParameter, [], SW_SHOWNORMAL )
+  DECLARE INTEGER ShellExecute IN shell32.dll ; 
+     INTEGER hndWin, STRING cAction, STRING cFileName, ; 
+     STRING cParams, STRING cDir, INTEGER nShowWin
+  ShellExecute( 0, m.tcCommand , m.tcURL, m.tcParameter , "", SW_SHOWNORMAL )
 Endfunc
 *********************************************************************************
 
@@ -1229,7 +1228,6 @@ Procedure ListAllCustomTools
   Lparameters tcFileName
   Local lnSelect
   Local lcDescript, lcPath
-
   If Empty(m.tcFileName)
     Local lcCursor, lcProg, lnTools
     m.lnSelect = Select()
@@ -1637,12 +1635,12 @@ Function CreatePandoraCursor
       DirX   | ** | Picklist of VFP files with more information, edit  |  c  |    |
       DirRun |***:| Picklist of VFP files with more information, run   |  ef |    |
       DirRun |*** | Picklist of VFP files with more information, run   | c   |    |
-      Desc   |    | Picklist of prg files with a description           | c   |    |
-      Desc   |    | Adds "* Description *" template to the active file | ef  |    |
+      Desc   | De | Picklist of prg files with a description           | c   |    |
+      Desc   | De | Adds "* Description *" template to the active file | ef  |    |
       <blank>|    | Opens default files listed in active .pan file     |  c  |    |
       <blank>|    | Menu                                               | ef  |    |
       0      |    | Opens active .pan file for editing                 | c   |    |
-      Lorem  |    | Random "Lorem Ipsum" text generator                | cef |    |
+      Lorem  | Lor| Random "Lorem Ipsum" text generator                | cef |    |
       Menu   | ?  | Menu                                               | ef  |    |
       Project|pr  | Picklist of projects in active .pan file           | c   |    |
       Help   |    | Opens Pandora page in the default Browser          | cef |    |

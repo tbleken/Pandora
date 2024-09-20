@@ -20,13 +20,13 @@ These "commands" work in **all** of VFP's code editors, including the command wi
 |Command |Short version| Result after pressing `Pandora` hotkey, e.g. `F8`|
 |:--|:--  |:-------------|
 |[. (dot)](documents/panta.md)|[, (comma)](documents/panta.md)| [Easily accessible "test area"](documents/panta.md)|
-|[Description](documents/pandesc.md)|[Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
+|[Description](documents/pandesc.md)|[De or Desc](documents/pandesc.md)| [List of all prg's which have a description](documents/pandesc.md)|
 |[Dir](documents/pandir.md)  |\*:| [List all VFP files in the path](documents/pandir.md)|
 |[DirX](documents/pandir.md#dirc)  |[\*\*:](documents/pandir.md#dirc)| [Same as above, more info in the table](documents/pandir.md#dirc)|
 |[Ed](documents/paned.md)|| [An easy way to open most files](documents/paned.md)|
 |[Fp](documents/panfp.md)|| [Field picker to create SQL statements](documents/panfp.md)|
 |[Hotkeys](documents/panhk.md) |[Hk](documents/panhk.md) |[List of all assigned hot keys](documents/panhk.md)|
-|[Lorem](documents/panrt.md) || [Generate random "Lorem Ipsum" text](documents/panrt.md)|
+|[Lorem](documents/panrt.md) |[Lor](documents/panrt.md)| [Generate random "Lorem Ipsum" text](documents/panrt.md)|
 |[NO <sub>Note 1</sub>](documents/panno.md)     || [NewObject() syntax builder](documents/panno.md)|
 |[Pan](documents/panext.md) |[!](documents/panext.md)| [Create and run your own `Pandora` extensions](documents/panext.md)|
 |[Paned](documents/panext.md#paned) |[!!](documents/panext.md#paned)| [Edit your own `Pandora` extensions](documents/panext.md#paned)|
