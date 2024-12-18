@@ -9,17 +9,30 @@ This is what happens in a prg or a method code window:
 | You type:  | After pressing `F8`                                                                  |
 |:----------|:--------------------------------------------------------------------------------------|
 | no lo zip | Local lo as zipfiles of utilities.vcx<br>lo = NewObject('zipfiles', 'utilities.vcx')  |
-| no lo=zip | Same as above, = is optional                                                          |
-| no lo zip!| Same as above, ! forces a refresh of the option list                                  |
-| no zip    | Local loZip as zipfiles of utilities.vcx<br>loZip = NewObject('zipfiles', 'utilities.vcx') |
-| no lo \*ut| Shows a list where `ut` is somewhere in a class name                                  |
-| no loVar +ut    | Shows list where `ut` is in a class name or a classlib name                     |
-| no myObj.Lo zip | myobj.NewObject('lo','zipfiles', 'utilities.vcx')                               |
-
+| no lo=zip | Same as above  |
+| no lo=zip!| Same as above, ! forces a refresh of the option list                                  |
+| no lo=\*ut| Shows a list where `ut` is somewhere in a class name                                  |
+| no lo=+ut    | Shows list where `ut` is in a class name or a classlib name                     |
 
 The last sample shows the syntax to call an object's NewObject method.  
+As you can see, you must either separate the variable name and the class name (or part of it) with a space or an equal sign (=).
 
-**Note 1:** In the Command window, no Local declaration is added.  
-**Note 2:** `No` calls an external "dynamic snippet", which is why the results show in a popup instead of a grid.
+If you don't specify the name of the variable, `lo` in these samples, the name is constructed as `lo + Classname`, for instance `loZipfiles`:
+
+| You type:  | After pressing `F8`                                                                  |
+|:----------|:--------------------------------------------------------------------------------------|
+| no zip    | Local loZipfiles as zipfiles of utilities.vcx  </br>loZipfiles = NewObject('zipfiles', 'utilities.vcx')) |
+
+You can also use this tool to add classes to an object, as shown below. If yo
+
+| You type:  | After pressing `F8`                                                                  |
+|:----------|:--------------------------------------------------------------------------------------|
+| no myObj.Lo=zip | myObj.NewObject('Lo','zipfiles', 'utilities.vcx')                               |
+| no myobj. zip|myobj.NewObject('loZipfiles','zipfiles', 'utilities.vcx')|
+| no myObj.ozip zip| myObj.NewObject('ozip','zipfiles', 'utilities.vcx')|
+
+
+**Note:** In the Command window, no Local declaration is added.  
+
 
 ![no](Images/panno.png)

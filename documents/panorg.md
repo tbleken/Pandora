@@ -73,22 +73,28 @@ Tip: If you store this file in your applications' root folder, you can have diff
 ## Note on the ***Pandora*** keyword `exe:`  
 
 If you want to **run** a prg or execute a VFP command from `pandora.pan` or any other .prg file, use the keyword `exe`.  
-You can see this "in action" above with the line `3 exe On Key Label ALT+2 do test`. The result is that when you type `3` in the command window and press `F8`, this line will be executed while the other files starting with `3` are opened.  
+You can see this "in action" above with the line `3 exe On Key Label ALT+2 do test`. The result is that when you type `3` in the command window and press `F8`, this line will be executed while the other files starting with `3` are opened. 
+
+## Note on the ***Pandora*** keyword `ed`
+
+Note that in the `Pandora` "organizer" file `pandora.pan`, the keyword `ed` must be left out if a group number is included as the first character(s) a line.
+
 
 ### Using `pandora.pan`: 
 
 |C/E| You type:                |        Result after pressing `F8`                                |
 |--|:-------------------------|:----------------------------------------------------------|
-| C| ed                           | Group of files defined in line 1 of `pandora.pan` are opened |
-| C| \<blank\>                    | Same as above                                             |
-| C| ed x (x=numeric,>0)          | Group of matching files in `pandora.pan` are opened       |
-| C| x (x=numeric)                | Same as above                           |
-|CE| ed 0 (zero)                  | File `pandora.pan` is opened in editor   |
-|CE| 0                            | Same as above                             |
-| C| pr                           | Picklist of projects in active `.pan` file (default = `pandora.pan`)                        |
-| C| 0 `somefilename`             | Active `Pandora` file is changed to `somefilename.pan`       |
-| C| 0 \*                 | Picklist of `Pandora` files in the path  |
-| C| 0 ?                 | Active `Pandora` file is reported  |
+| C| `ed`                           | Group of files defined in line 1 of `pandora.pan` are opened |
+| C| `<blank>`                    | Same as above                                             |
+| C| `ed x (x=integer,>0)`          | Group of matching files in `pandora.pan` are opened       |
+| C| `x (x=integer)`                | Same as above                           |
+|CE| `ed 0 (zero)`                  | File `pandora.pan` is opened in editor   |
+|CE| `0`                            | Same as above                             |
+|C| `es x (integer)`               | Creates Editsource() command for all open windows   |
+| C| `pr`                           | Picklist of projects in active `.pan` file (default = `pandora.pan`)                        |
+| C| `0 somefilename`             | Active `Pandora` file is changed to `somefilename.pan`       |
+| C| `0 *`                 | Picklist of `Pandora` files in the path  |
+| C| `0 ?`                 | Active `Pandora` file is reported  |
 
 #### The C/E column describes where the "command" (keyword) works: 
 **C:** Command Window  
@@ -98,12 +104,12 @@ You can see this "in action" above with the line `3 exe On Key Label ALT+2 do te
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
-| ed test.txt                  | File `test.txt` is opened in editor        |
-| ed prog\pro1.prg             | `prog\pro1.prg` is opened in editor              |
-| ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg') | variable is resolved and file opened in editor |
-| ed myprog.prg && My notes    | `myprog.prg` is opened, comments ignored       |
-| ed mytable.dbf               | `mytable.dbf` is opened in SuperBrowse        |   
-| ed pg.vcx                    | `pg.vcx` is opened in the Class Browser  |
+| `ed test.txt`                  | File `test.txt` is opened in editor        |
+| `ed prog\pro1.prg`             | `prog\pro1.prg` is opened in editor              |
+| `ed (_screen.cthorfolder + 'Tools\peme_snippet_no.prg')` | variable is resolved and file opened in editor |
+| `ed myprog.prg && My notes`    | `myprog.prg` is opened, comments ignored       |
+| `ed mytable.dbf`               | `mytable.dbf` is opened in SuperBrowse        |   
+| `ed pg.vcx`                    | `pg.vcx` is opened in the Class Browser  |
 
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File): 
 
@@ -127,10 +133,10 @@ Likewise, for a vcx the class browser is opened, in addition to the method edito
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
-| ed pg.vcx.pg1      | Class `pg1` in `pg.vcx` is opened, last method appears in the editor|
-| ed pg.vcx.pg1.init | Class `pg1` in `pg.vcx` is opened, `init` method appears in the editor|
-| ed pg.scx.form.txtfind.keypress  | Form `pg.scx` is opened and editor shows `form.txtfind.keypress`|
-| ed pg.scx.form.txtfind.keypress:10| Same as above, cursor is on line 10         |
+| `ed pg.vcx.pg1`      | Class `pg1` in `pg.vcx` is opened, last method appears in the editor|
+| `ed pg.vcx.pg1.init` | Class `pg1` in `pg.vcx` is opened, `init` method appears in the editor|
+| `ed pg.scx.form.txtfind.keypress`  | Form `pg.scx` is opened and editor shows `form.txtfind.keypress`|
+| `ed pg.scx.form.txtfind.keypress:10`| Same as above, cursor is on line 10         |
 
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
 
@@ -144,9 +150,9 @@ Likewise, a URL will be opened in the default Browser.
 
 | You type:                |        Result after pressing `F8`                                |
 |:-------------------------|:----------------------------------------------------------|
-| ed https:\/\/github.com/VFPX/Thor | Thor homepage opens in default browser      |
-| ed C:\Somefolder\Somefile.xlsx    | `Somefile.xlsx` is opened in Excel        |
-| ed C:\Somefolder\Somemovie.mp4    | `Somemovie.mp4` is opened in default application        |
+| `ed https:\\github.com/VFPX/Thor` | Thor homepage opens in default browser      |
+| `ed C:\Somefolder\Somefile.xlsx`    | `Somefile.xlsx` is opened in Excel        |
+| `ed C:\Somefolder\Somemovie.mp4`    | `Somemovie.mp4` is opened in default application        |
 
 #### This feature works in the Command Window and in the editors (Modify Command and Modify File) 
 
@@ -156,7 +162,7 @@ Likewise, a URL will be opened in the default Browser.
 
 | Command| Short                |        Result after pressing `F8`                                |
 |:-------|:------------------|:----------------------------------------------------------|
-| project| pr | List of "projects" in the active .pan file|
+| `project`| `pr`, `-` (minus) | List of "projects" in the active .pan file|
 
   
 ![Project](Images/panproj.png)

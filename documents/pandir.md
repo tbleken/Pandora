@@ -21,8 +21,8 @@ This tool comes in three variants:
 |dir db cust | \* db cust       | All files with names containing  `db` *and* `cust` |  
 |dir my .prg | \* my .prg          | All files with `my` in the name *and* `prg`as extension|
 | dir .png | \* .png             | All files `.png` files |
-|dirx| \*\* (or **:<sub>note 1</sub>)               | Same as Dir, with more information, se below|  
-|dirrun| \*\*\* (or ***:<sub>note 1</sub>)               | Same as DirX, will run file|  
+|dirx| +, \*\* (or **:<sub>note 1</sub>)               | Same as Dir, with more information, se below|  
+|dirrun|++, \*\*\* (or ***:<sub>note 1</sub>)               | Same as DirX, will run file|  
 
 ### Note 1: 
 In order **not** to "collide" with comments in the editor windows, the short form of the syntax **must** include the colon (**:**) after the one or two asterisks (\*). 

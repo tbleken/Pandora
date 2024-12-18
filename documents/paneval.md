@@ -5,17 +5,21 @@ If you want to insert the `result` of a function into your file, **Pandora** mak
 
 | You type:  | After pressing `F8`:|
 |:----------|:----------------------|
-| =xxx  | The **result** of function xxx is inserted |
-| = xxx  | Same as above |
+| = xxx()  | The **result** of function xxx is inserted |
+| = xxx | Same as above |
+| =xxx | Same as above |
 | eval xxx  |  Same as above |
 
 `xxx` can be **any** VFP function or UDF. Only functions which return a value, are accepted. 
 
-Example: 
-```foxpro
-=date() && When F8 is pressed, today's date is inserted
-=myfunc() && F8 will call the UDF myfunc and insert the returned value
-```
+Example:  
+
+| You type:  | After pressing `F8`:| 
+|:----------|:----------------------| 
+| =date() | Today's date is inserted| 
+| =date | Same as above, parentheses (brackets) are automatically added | 
+| =myfunc() | myfunc is called and returned value is inserted|  
+| =sqrt(10) | 3.16 is inserted (or 3.1623 if Set Decimals is 4)|
 
 One common use for this feature, is to add misc. comments with important "dynamic" information into the source code.
 
