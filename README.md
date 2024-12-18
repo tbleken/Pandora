@@ -1,8 +1,6 @@
 
 [![How Pandora works](documents/Images/pandora2.png)](documents/panhow.md)
 
-Version 1.07 Released 2024-11-20
-
 [What's new in this release](Change%20Log.md)
 
 ***
