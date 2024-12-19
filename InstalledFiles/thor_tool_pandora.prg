@@ -6,7 +6,6 @@ Lparameters lxParam1
 #Define ccPandoraHelp 'https://github.com/tbleken/Pandora'
 #Define ccPipe "|"
 #Define ccAmp  [&] + [&]
-#Define ccVersion '1.10'
 #Define ccUnknownCommand 'Illegal command'
 #Define ccDescriptionMask1 '* Description:'
 #Define ccDescriptionMask2 '*'
@@ -45,7 +44,8 @@ A tool with many features
     .Sort       = 0 && the sort order for all items from the same Category
 
     * For public tools, such as PEM Editor, etc.
-    .Version     = [1.07] && e.g., 'Version 7, May 18, 2011'
+    .Version     = [1.11] && e.g., 'Version 7, May 18, 2011'
+    .Version     = ccVersion
     .Author        = [TB]
     .Link          = ccPandoraHelp && link to a page for this tool
     .VideoLink     = [] && link to a video for this tool
@@ -240,7 +240,7 @@ Function ProcessText
     Case m.lnWindowType > 0 And (Inlist(Lower(m.lcCommand), [insert], [ins]) Or m.lcCommand = [+])
       If m.lcCommand = [+] And Empty(m.lcParam1) And Len(m.lcCommand) > 2
         lcParam1 = Substr(m.lcCommand, 2)
-      Endif
+      EndIf
       InsertMethod(m.lcParam1)
     Case Inlist(Lower(m.lcCommand), [=], [eval])
       If m.lcCommand = [=] And Empty(m.lcParam1) And Len(m.lcCommand) > 1
@@ -528,7 +528,7 @@ Procedure ListDescript
   If m.lnFiles = 0
     Return
   Endif
-  Create Cursor (ccCursorfiles) (Filename c(200), FullName c(200), Descript c(100), Datetime D, Size i, LineS i, Text m, uDescript c(100))
+  Create Cursor (ccCursorfiles) (Filename c(240), FullName c(240), Descript c(100), Datetime D, Size i, LineS i, Text m, uDescript c(100))
   For lnX = 1 To m.lnFiles
     If Lower(Justext(m.laFiles(m.lnX))) =  [prg]
       lcDescript = GetDescript(m.laFiles(m.lnX))
@@ -1112,7 +1112,7 @@ Function GetThorFiles
   Lparameters tcMask, tcCursor
   Local laDummy[1], laFolders[1], lcFileSkel, lnFiles, lnFolders, lnX, lnX2
   tcCursor = Evl(m.tcCursor, [curFiles])
-  Create Cursor (m.tcCursor) (Fname c(200), Filedate D, FileSize i)
+  Create Cursor (m.tcCursor) (Fname c(240), Filedate D, FileSize i)
   tcMask = Evl(m.tcMask, [prg])
   Dimension m.laFolders(3)
   laFolders(1) = _Screen.Cthorfolder + [Tools]
@@ -1152,7 +1152,7 @@ Function ListProjects
   lcClip = _Cliptext
   loEditorWin = Execscript(_Screen.cThorDispatcher, [Thor_Proc_EditorWin])
   If m.loEditorWin.FindWindow() = 0
-    Create Cursor curProjects (text1 c(200), Projnotxt c(3), Project c(50), projno i)
+    Create Cursor curProjects (text1 c(240), Projnotxt c(3), Project c(50), projno i)
     Append From (m.lcTable) Sdf
     Replace All Projnotxt With Ltrim(Strextract(text1, [#], [ ], 1)),;
       projno With Val(Strextract(text1, [#], [ ], 1))
@@ -1745,7 +1745,7 @@ Function GetFilesInPath
   Local laDummy[1], laFolders[1], lcFileSkel, lnFiles, lnFolders, lnX, lnX2
 
   tcCursor = Evl(m.tcCursor, [curFiles])
-  Create Cursor (m.tcCursor) (Fname c(200), Filedate D, FileSize i)
+  Create Cursor (m.tcCursor) (Fname c(240), Filedate D, FileSize i)
   tcMask = Evl(m.tcMask, [prg])
   lnFolders = Alines(laFolders, Set([Path]), 1 + 4, [;], [,])
   For lnX = 0 To m.lnFolders
@@ -1802,7 +1802,7 @@ Function InsertMethod
     lcMethod = Alltrim(Lower(m.tcMethod))
     lcText = []
     lnSelect = Select()
-    Create Cursor CurMethods (Method c(200), Source c(200), Code m)
+    Create Cursor CurMethods (Method c(240), Source c(240), Code m)
     GetFilesInPath([prg], [curPrgs])
     Scan
       lcSource = curprgs.Fname
@@ -1862,7 +1862,7 @@ Function methodfromprg
       If m.lnX > 0
         lcReturn = []
         For lnX = m.lnStart To m.lnEnd
-          lcReturn  = m.lcReturn + Trim(m.laDummy(m.lnX )) + Chr(13)
+          lcReturn  = m.lcReturn + Trim(m.laDummy(m.lnX )) + crlf
         Endfor
       Endif
     Endif
@@ -2365,6 +2365,7 @@ Function CreatePandoraCursor
       Rt     |    | Random readable text generator                     | cef |    |
       Ta     | .  | Test area "pandora.prg"                            | cef |    |
       Thor   | th | Picklist of registered Thor tools                  | cef |    |
+      Version| ver| Shows Pandora version number                       | cef |    |
       Hotkeys| hk | Picklist of all assigned hot keys                  | cef |    |
       Ed     |    | Easy way to open most files                        | cef | Filename or URL: |
       Ec     |    | The content of the clipboard is executed           | cef |    |
